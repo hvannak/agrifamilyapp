@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'mypost.dart';
+import 'myaccount.dart';
+import 'myhome.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,21 +32,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+  static List<Widget> _widgetOptions = <Widget>[
+    // homeUi,
+    Myhome(),
+    postUi,
+    accountUi
   ];
 
   void _onItemTapped(int index) {
@@ -69,15 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'HOME',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Business',
+            label: 'POSTS',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'School',
+            label: 'ACCOUNTS',
           ),
         ],
         currentIndex: _selectedIndex,

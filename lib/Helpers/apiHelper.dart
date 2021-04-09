@@ -19,7 +19,8 @@ class ApiHelper {
     _userId = (sharedPreferences.getString('Id') ?? '');
     _employeeID = (sharedPreferences.getInt('empId') ?? 0);
     _linkedEntityID = (sharedPreferences.getString('linkedEntityID') ?? '');
-    _urlSetting = 'http://192.168.100.93:2394' ;
+    // _urlSetting = 'http://192.168.100.93:2394' ;
+    _urlSetting = 'http://192.168.100.67:3000' ;
   }
 
   Future<http.Response> fetchPost(String url, Map<String, dynamic> body) async {
@@ -38,6 +39,15 @@ class ApiHelper {
       HttpHeaders.authorizationHeader: "Bearer " + _token
     });
     print('Fetch Post');
+    return response;
+  }
+
+    Future<http.Response> fetchPostNode(
+      String url, Map<String, dynamic> body) async {       
+    final response =
+        await http.post(Uri.http(_urlSetting, url), body: json.encode(body), headers: {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    });
     return response;
   }
 
