@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+
 class PostModel {
    String id;
    String category;
@@ -10,14 +12,14 @@ class PostModel {
    String location;
    int price;
    String currency;
-   String firstimage;
+   Uint8List firstimage;
    String date;
 
   PostModel({this.id,this.category,this.user,this.title,this.description,this.phone,this.email,this.location,this.price,this.currency,this.firstimage,this.date});
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-      id: json['id'],
+      id: json['_id'],
       category: json['category']["title"],
       user: json['user'],
       title: json['title'],
