@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:agrifamilyapp/models/post.dart';
+import 'package:agrifamilyapp/models/postimage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -28,9 +30,46 @@ class _MyhomeState extends State<Myhome> {
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
 
       if (response.statusCode == 200) {
-        var list = jsonDecode(response.body)["objList"] as List;
-        _listPost = list.map((i) => PostModel.fromJson(i)).toList();
+        // var list = jsonDecode(response.body)["objList"] as List;
+        // _listPost = list.map((i) => PostModel.fromJson(i)).toList();
+        var jsonData = jsonDecode(response.body)["objList"] as List;
+        for (var i = 0; i < jsonData.length; i++) {
+          final response1 = await http.get(
+          Uri.parse('http://192.168.100.67:3000/api/posts/getImageByPostId/' + jsonData[i]["_id"]),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'});
+          if(response1.statusCode == 200){
+            // var postImage = PostImageModel.fromJson(jsonDecode(response1.body)[0]);
+            // print('post'+ postImage.post);
+            try{
+              var imagedata = jsonDecode(response1.body)[0]["image"]["data"];
+              Uint8List imageblob = Base64Codec().decode(imagedata);
+              _listPost.add(new PostModel());
+            } catch(e){
+              print(e);
+            }
+          }
+          _listPost.add(PostModel.fromJson(jsonData[i]));
+          print('list length:' + _listPost.length.toString());
+        }
+
         return _listPost;
+      } else {
+        throw Exception('Failed to load post');
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text(e));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  fetchFirstImage(postId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('http://192.168.100.67:3000/api/posts/getImageByPostId/' + postId),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'});
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body)[0]);
+        return PostImageModel.fromJson(jsonDecode(response.body)[0]);
       } else {
         throw Exception('Failed to load post');
       }
@@ -80,16 +119,16 @@ class _MyhomeState extends State<Myhome> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Image.network(
-                                'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png',
-                                fit: BoxFit.contain,
-                                width: 100,
-                              ),
+                              // Image.network(
+                              //   'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png',
+                              //   fit: BoxFit.contain,
+                              //   width: 100,
+                              // ),
+                              // Image.memory(snapshot.data[index].firstimage),
                               ListTile(
                                 leading: Icon(Icons.album),
                                 title: Text(snapshot.data[index].title),
-                                subtitle: Text(
-                                    'Music by Julie Gable. Lyrics by Sidney Stein.'),
+                                subtitle: Text(snapshot.data[index].description),
                               ),
                             ],
                           ),
