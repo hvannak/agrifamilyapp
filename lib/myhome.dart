@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:agrifamilyapp/models/post.dart';
 import 'package:agrifamilyapp/models/postimage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class _MyhomeState extends State<Myhome> {
       };
 
       final response = await http.post(
-          Uri.parse('http://192.168.100.67:3000/api/posts/searchByCat'),
+          Uri.parse('https://agrifamily.herokuapp.com/api/posts/searchByCat'),
           body: json.encode(body),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
 
@@ -35,20 +36,29 @@ class _MyhomeState extends State<Myhome> {
         var jsonData = jsonDecode(response.body)["objList"] as List;
         for (var i = 0; i < jsonData.length; i++) {
           final response1 = await http.get(
-          Uri.parse('http://192.168.100.67:3000/api/posts/getImageByPostId/' + jsonData[i]["_id"]),
+          Uri.parse('https://agrifamily.herokuapp.com/api/posts/getImageByPostId/' + jsonData[i]["_id"]),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
           if(response1.statusCode == 200){
             // var postImage = PostImageModel.fromJson(jsonDecode(response1.body)[0]);
             // print('post'+ postImage.post);
+            print('print');
+            // var bytes = new Uint8Array(imagedata.data);
+            // var binary = bytes.reduce(
+            //   (data, b) => (data += String.fromCharCode(b)),
+            //   ""
+            // );
             try{
               var imagedata = jsonDecode(response1.body)[0]["image"]["data"];
-              Uint8List imageblob = Base64Codec().decode(imagedata);
-              _listPost.add(new PostModel());
+              print(imagedata);
+              Uint8List listdata = Uint8List.fromList((imagedata as List)?.map((e) => e as int)?.toList());
+              print(listdata);
+              // Uint8List imageblob = Base64Codec().decode(imagedata);
+              // var bytes = imagedata.buffer.asUint8List();
+              _listPost.add(PostModel.fromJson(jsonData[i], listdata));
             } catch(e){
               print(e);
             }
           }
-          _listPost.add(PostModel.fromJson(jsonData[i]));
           print('list length:' + _listPost.length.toString());
         }
 
@@ -124,7 +134,7 @@ class _MyhomeState extends State<Myhome> {
                               //   fit: BoxFit.contain,
                               //   width: 100,
                               // ),
-                              // Image.memory(snapshot.data[index].firstimage),
+                              Image.memory(snapshot.data[index].firstimage),
                               ListTile(
                                 leading: Icon(Icons.album),
                                 title: Text(snapshot.data[index].title),

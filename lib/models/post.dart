@@ -17,7 +17,7 @@ class PostModel {
 
   PostModel({this.id,this.category,this.user,this.title,this.description,this.phone,this.email,this.location,this.price,this.currency,this.firstimage,this.date});
 
-  factory PostModel.fromJson(Map<String, dynamic> json) {
+  factory PostModel.fromJson(Map<String, dynamic> json,Uint8List image) {
     return PostModel(
       id: json['_id'],
       category: json['category']["title"],
@@ -29,7 +29,7 @@ class PostModel {
       location: json['location'],
       price: json['price'],
       currency: json['currency'],
-      firstimage: json['firstimage'],
+      firstimage: image,
       date: json['date']
     );
   }

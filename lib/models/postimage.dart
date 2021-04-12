@@ -1,5 +1,4 @@
 
-import 'package:flutter/services.dart';
 
 class PostImageModel {
    String id;
