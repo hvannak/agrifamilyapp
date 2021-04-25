@@ -4,10 +4,11 @@ import 'dart:typed_data';
 
 import 'package:agrifamilyapp/models/post.dart';
 import 'package:agrifamilyapp/models/postimage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+
+import 'models/imagedata.dart';
 
 class Myhome extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class Myhome extends StatefulWidget {
 
 class _MyhomeState extends State<Myhome> {
   List<PostModel> _listPost = [];
+  List<ImageData> _listPostImage = [];
 
   fetchPosts() async {
     try {
@@ -39,21 +41,9 @@ class _MyhomeState extends State<Myhome> {
           Uri.parse('https://agrifamily.herokuapp.com/api/posts/getImageByPostId/' + jsonData[i]["_id"]),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
           if(response1.statusCode == 200){
-            // var postImage = PostImageModel.fromJson(jsonDecode(response1.body)[0]);
-            // print('post'+ postImage.post);
-            print('print');
-            // var bytes = new Uint8Array(imagedata.data);
-            // var binary = bytes.reduce(
-            //   (data, b) => (data += String.fromCharCode(b)),
-            //   ""
-            // );
             try{
               var imagedata = jsonDecode(response1.body)[0]["image"]["data"];
-              print(imagedata);
               Uint8List listdata = Uint8List.fromList((imagedata as List)?.map((e) => e as int)?.toList());
-              print(listdata);
-              // Uint8List imageblob = Base64Codec().decode(imagedata);
-              // var bytes = imagedata.buffer.asUint8List();
               _listPost.add(PostModel.fromJson(jsonData[i], listdata));
             } catch(e){
               print(e);
@@ -72,18 +62,22 @@ class _MyhomeState extends State<Myhome> {
     }
   }
 
-  fetchFirstImage(postId) async {
+  fetchFirstImage() async {
     try {
       final response = await http.get(
-          Uri.parse('http://192.168.100.67:3000/api/posts/getImageByPostId/' + postId),
+          Uri.parse('https://agrifamily.herokuapp.com/api/posts/getImageByPostId/' + "6067be61e0a52c0022ea1916"),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
       if (response.statusCode == 200) {
-        print(jsonDecode(response.body)[0]);
-        return PostImageModel.fromJson(jsonDecode(response.body)[0]);
+        print(jsonDecode(response.body)[0]['image']['data']);
+        var list = jsonDecode(response.body) as List;
+        _listPostImage = list.map((i) => ImageData.fromJson(i)).toList();
+        return _listPostImage;
+        // return _listPostImage.add(ImageData.fromJson(jsonDecode(response.body)[0]));
       } else {
         throw Exception('Failed to load post');
       }
     } catch (e) {
+      print(e);
       final snackBar = SnackBar(content: Text(e));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -91,19 +85,20 @@ class _MyhomeState extends State<Myhome> {
 
   @override
   Widget build(BuildContext context) {
-    // return TextButton(
-    //   style: ButtonStyle(
-    //     foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-    //   ),
-    //   onPressed: () async {
-    //     fetchPosts();
-    //   },
-    //   child: Text('TextButton'),
+    // return Container(
+    //   child: TextButton(
+    //     style: ButtonStyle(
+    //       foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+    //     ),
+    //     onPressed: () async {
+    //       await fetchFirstImage();
+    //      },
+    //     child: Text('TextButton'),
+    //   )
     // );
-
     return Container(
         child: FutureBuilder(
-      future: fetchPosts(),
+      future: fetchFirstImage(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null) {
           return Container(
@@ -134,12 +129,12 @@ class _MyhomeState extends State<Myhome> {
                               //   fit: BoxFit.contain,
                               //   width: 100,
                               // ),
-                              Image.memory(snapshot.data[index].firstimage),
-                              ListTile(
-                                leading: Icon(Icons.album),
-                                title: Text(snapshot.data[index].title),
-                                subtitle: Text(snapshot.data[index].description),
-                              ),
+                              Image.memory(Uint8List.fromList(snapshot.data[index].image)),
+                              // ListTile(
+                              //   leading: Icon(Icons.album),
+                              //   title: Text(snapshot.data[index].title),
+                              //   subtitle: Text(snapshot.data[index].description),
+                              // ),
                             ],
                           ),
                         )),

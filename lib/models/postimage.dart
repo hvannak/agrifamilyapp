@@ -1,27 +1,19 @@
 
-
 class PostImageModel {
    String id;
-   String image;
+   List<int> image;
    String post;
    String date;
 
-  PostImageModel({this.id,this.image,this.post,this.date});
+  PostImageModel({this.id,this.post,this.date,this.image});
 
   factory PostImageModel.fromJson(Map<String, dynamic> json) {
     return PostImageModel(
-      id: json['id'],
-      // image: json['image']["data"],
+      id: json['_id'],
+      image: json['image'],
       post: json['post'],
       date: json['date']
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    '_id': id,
-    'image':image,
-    'post': post,
-    'date': date
-  };
 
 }
