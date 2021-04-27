@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:agrifamilyapp/models/post.dart';
-import 'package:agrifamilyapp/models/postimage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -68,9 +68,9 @@ class _MyhomeState extends State<Myhome> {
           Uri.parse('https://agrifamily.herokuapp.com/api/posts/getImageByPostId/' + "6067be61e0a52c0022ea1916"),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
       if (response.statusCode == 200) {
-        print(jsonDecode(response.body)[0]['image']['data']);
         var list = jsonDecode(response.body) as List;
         _listPostImage = list.map((i) => ImageData.fromJson(i)).toList();
+        print(_listPostImage[1].image);
         return _listPostImage;
         // return _listPostImage.add(ImageData.fromJson(jsonDecode(response.body)[0]));
       } else {
@@ -85,17 +85,6 @@ class _MyhomeState extends State<Myhome> {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   child: TextButton(
-    //     style: ButtonStyle(
-    //       foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-    //     ),
-    //     onPressed: () async {
-    //       await fetchFirstImage();
-    //      },
-    //     child: Text('TextButton'),
-    //   )
-    // );
     return Container(
         child: FutureBuilder(
       future: fetchFirstImage(),
@@ -129,7 +118,8 @@ class _MyhomeState extends State<Myhome> {
                               //   fit: BoxFit.contain,
                               //   width: 100,
                               // ),
-                              Image.memory(Uint8List.fromList(snapshot.data[index].image)),
+                              // Image.memory(snapshot.data[index].image),
+                              Image.memory(snapshot.data[index].image)
                               // ListTile(
                               //   leading: Icon(Icons.album),
                               //   title: Text(snapshot.data[index].title),

@@ -33,10 +33,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    // homeUi,
     Myhome(),
-    postUi,
-    accountUi
+    MyPosts(),
+    MyAccount()
   ];
 
   void _onItemTapped(int index) {
