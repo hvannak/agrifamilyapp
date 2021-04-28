@@ -14,7 +14,7 @@ Widget buildControlTF(
           label,
           style: kLabelStyle,
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 5.0),
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
@@ -37,13 +37,7 @@ Widget buildControlTF(
             ),
             onChanged: (value) async {
               if (tap) {
-                // if (textEditingController == _numOfDays) {
-                //   _numOfHours.text =
-                //       (double.parse(value) * hourPerday).toString();
-                // } else {
-                //   _numOfDays.text =
-                //       (double.parse(value) / hourPerday).toString();
-                // }
+                print('Your taped');
               }
             },
           ),
@@ -53,13 +47,22 @@ Widget buildControlTF(
   }
 
 
-  Widget buildSaveBtn(GlobalKey<FormState> formKey) {
+  Widget buildSaveBtn(BuildContext context,GlobalKey<FormState> formKey,dynamic dynamicFuc) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => (formKey.currentState.validate()),
+        onPressed: () {
+          if(formKey.currentState.validate()){
+            print('valid');
+            dynamicFuc();
+          }
+          else{
+            final snackBar = SnackBar(content: Text('Please verify your input.'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),

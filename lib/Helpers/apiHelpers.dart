@@ -7,10 +7,20 @@ class ApiHelpers {
   static String _urlSetting = 'https://agrifamily.herokuapp.com/api';
 
    static Future<http.Response> fetchPost(
-      String url, Map<String, dynamic> body) async {       
+      String url, body) async {
+        print(Uri.parse(_urlSetting + url));
+        print(body);
     final response =
-        await http.post(Uri.http(_urlSetting, url), body: json.encode(body), headers: {
+        await http.post(Uri.parse(_urlSetting + url), body: json.encode(body), headers: {
       HttpHeaders.contentTypeHeader: 'application/json'
+    });
+    return response;
+  }
+
+static Future<http.Response> fetchData(String url, String token) async {
+    final response = await http.get(Uri.parse(_urlSetting+ url), headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      'auth-token': token
     });
     return response;
   }
@@ -34,15 +44,6 @@ class ApiHelpers {
     print('Fetch Put');
     return response;
   }
-
-  Future<http.Response> fetchData(String url, String token) async {
-    final response = await http.get(Uri.http(_urlSetting, url), headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: "Bearer " + token
-    });
-    return response;
-  }
-
 
   Future<http.Response> deleteData(String url, int id) async {
     final response =
