@@ -3,6 +3,7 @@ import 'package:agrifamilyapp/models/usermodel.dart';
 import 'package:agrifamilyapp/modules/myaccountfunc.dart';
 import 'package:flutter/material.dart';
 
+import 'Helpers/constants.dart';
 import 'formcontrols/formcontrols.dart';
 
 class MyAccount extends StatefulWidget {
@@ -12,6 +13,7 @@ class MyAccount extends StatefulWidget {
 
 class _MyAccountState extends State<MyAccount> {
   final _formKey = GlobalKey<FormState>();
+  var _userObject = UsersModel();
   var _email = TextEditingController();
   var _password = TextEditingController();
   bool _isLogin = false;
@@ -20,23 +22,60 @@ class _MyAccountState extends State<MyAccount> {
   Widget build(BuildContext context) {
     if(_isLogin){
       return Container(
+        color: Colors.lightBlueAccent,
+        alignment: Alignment.topCenter,
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(
-            horizontal: 10.0,
-            vertical: 10.0,
-          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Card(
-                shadowColor: Colors.blue,
-                child: Container(
-                  child: Text('You ar in'),
-                ),
+              Stack(
+                children: [
+                  Image.asset('assets/images/bgprofile.jpg',fit: BoxFit.fitHeight,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blue,
+                              child: ClipOval(
+                                child: Image.asset('assets/images/profile.png',fit: BoxFit.cover),
+                              ),
+                              radius: 90,
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.arrow_drop_down_circle),
+                              title: Text(_userObject.email,style: headertextStyle),
+                              subtitle: Text(_userObject.name),
+                            ),
+                            Card(
+                              elevation: 10.0,
+                              child: Padding(
+                              padding: EdgeInsets.all(50),
+                              child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  buildControlTF(context, 'Email', _email,
+                                      Icons.person,false, true),
+                                  buildControlTF(context, 'Password', _password,
+                                      Icons.security,true, true),
+                                  buildChangeBtn()
+                                ],
+                              )),)
+                            
+                            )
+                          ],
+                        )
+                      )
+                    ],
+                  )
+                ],
               )
             ],
-          ),
+          )
         ),
       );
     } else {
@@ -86,6 +125,7 @@ class _MyAccountState extends State<MyAccount> {
             logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson()).then((value) => {
               setState(() {
                 _isLogin = true;
+                _userObject = value;
               })
             });
           }
@@ -135,6 +175,40 @@ class _MyAccountState extends State<MyAccount> {
         color: Colors.white,
         child: Text(
           'REGISTER',
+          style: TextStyle(
+            color: Color(0xFF527DAA),
+            letterSpacing: 1.5,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildChangeBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 2.0,
+        onPressed: () {
+          if(_formKey.currentState.validate()){
+            logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson());
+          }
+          else{
+            final snackBar = SnackBar(content: Text('Please verify your input.'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
+        padding: EdgeInsets.all(15.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        color: Colors.white,
+        child: Text(
+          'CHANG',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,

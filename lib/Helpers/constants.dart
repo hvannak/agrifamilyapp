@@ -19,9 +19,9 @@ final kTextStyle = TextStyle(
   fontFamily: 'OpenSans',
 );
 
-final textStyle = TextStyle(
+final headertextStyle = TextStyle(
   color: Color(0xFF527DAA),
-  fontSize: 16.0,
+  fontSize: 24.0,
   fontWeight: FontWeight.bold,
   fontFamily: 'OpenSans',
 );
