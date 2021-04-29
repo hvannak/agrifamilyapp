@@ -1,5 +1,30 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:agrifamilyapp/Helpers/apiHelpers.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:flutter/material.dart';
+
+import 'mygeneralfunc.dart';
+
+Future<List<PostsModel>> getByPage(BuildContext context,Map<String, dynamic> instance) async {
+    try {
+      var response = await ApiHelpers.fetchPostWithAuth('/posts/pageclient',instance,await getsharedPref('token'));
+      if (response.statusCode == 200) {
+        var list = jsonDecode(response.body) as List;
+        List<PostsModel> postList = list.map((i) => PostsModel.fromJson(i)).toList();
+        return postList;
+      } else {
+        throw (response.statusCode.toString());
+      }
+    } on SocketException catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw(e);
+    } on Exception catch (e) {
+      throw (e);
+    }
+  }
 
 // Future<List<PostsModel>> fetchLeaveData() async {
 //     try {
