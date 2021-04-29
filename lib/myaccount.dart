@@ -1,6 +1,7 @@
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/models/usermodel.dart';
 import 'package:agrifamilyapp/modules/myaccountfunc.dart';
+import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:flutter/material.dart';
 
 import 'Helpers/constants.dart';
@@ -13,10 +14,18 @@ class MyAccount extends StatefulWidget {
 
 class _MyAccountState extends State<MyAccount> {
   final _formKey = GlobalKey<FormState>();
+  final _formKeymodify = GlobalKey<FormState>();
   var _userObject = UsersModel();
+  var _name = TextEditingController();
   var _email = TextEditingController();
   var _password = TextEditingController();
   bool _isLogin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +64,11 @@ class _MyAccountState extends State<MyAccount> {
                               child: Padding(
                               padding: EdgeInsets.all(50),
                               child: Form(
-                              key: _formKey,
+                              key: _formKeymodify,
                               child: Column(
                                 children: <Widget>[
+                                  buildControlTF(context, 'Name', _name,
+                                      Icons.verified_user,false, true),
                                   buildControlTF(context, 'Email', _email,
                                       Icons.person,false, true),
                                   buildControlTF(context, 'Password', _password,
@@ -112,6 +123,20 @@ class _MyAccountState extends State<MyAccount> {
       ),
     );
     }    
+  }
+
+   _initUserData() async {
+    var token = await getsharedPref('token');
+    if(token.isNotEmpty){
+      var userData = await getById(context);
+      setState(() {
+        _isLogin = true;
+        _userObject = userData;
+        _name.text = _userObject.name;
+        _email.text = _userObject.email;
+
+      });
+    }
   }
 
   Widget buildLoginBtn() {
@@ -194,8 +219,13 @@ class _MyAccountState extends State<MyAccount> {
       child: RaisedButton(
         elevation: 2.0,
         onPressed: () {
-          if(_formKey.currentState.validate()){
-            logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson());
+          if(_formKeymodify.currentState.validate()){
+            update(context,UsersModel(id: _userObject.id,name: _name.text,email: _email.text,password: _password.text,backctl: false).toJson()).then((value) => {
+              setState(() {
+                _isLogin = true;
+                _userObject = value;
+              })
+            });
           }
           else{
             final snackBar = SnackBar(content: Text('Please verify your input.'));
