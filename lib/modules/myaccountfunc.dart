@@ -66,3 +66,23 @@ Future<UsersModel> logIn(BuildContext context,Map<String, dynamic> instance) asy
       throw (e);
     }
   }
+
+  Future<UsersModel> register(BuildContext context,Map<String, dynamic> instance) async {
+    try {
+      var response = await ApiHelpers.fetchPost(
+            '/user/register', instance);
+      if (response.statusCode == 200) {
+        final snackBar = SnackBar(content: Text('Your register is successfully.'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return UsersModel.fromJson(jsonDecode(response.body));
+      } else {
+        throw (response.statusCode.toString());
+      }
+    } on SocketException catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw(e);
+    } on Exception catch (e) {
+      throw (e);
+    }
+  }
