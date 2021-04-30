@@ -1,16 +1,16 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UsersModel {
-   String id;
-   String name;
+   String? id;
+   late String name;
    String email;
    String password;
-   bool backctl;
-   String date;
-  UsersModel({this.id,this.name,this.password,this.backctl,this.email,this.date});
-  UsersModel.login({this.email,this.password});
+   bool backctl = false;
+   String? date;
+  UsersModel({this.id,required this.name,required this.password,required this.backctl,required this.email,this.date});
+  UsersModel.login({required this.email,required this.password});
   factory UsersModel.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
   Map<String, dynamic> toJson() => _$UserDataToJson(this);
   Map<String, dynamic> toLoginJson() => _$UserLoginToJson(this);

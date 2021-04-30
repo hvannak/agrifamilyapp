@@ -9,6 +9,7 @@ import 'mygeneralfunc.dart';
 
 Future<List<PostsModel>> getByPage(BuildContext context,Map<String, dynamic> instance) async {
     try {
+      print(instance);
       var response = await ApiHelpers.fetchPostWithAuth('/posts/pageclient',instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
         var list = jsonDecode(response.body) as List;

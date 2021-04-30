@@ -1,3 +1,7 @@
+import 'package:agrifamilyapp/models/pageobjmodel.dart';
+import 'package:agrifamilyapp/models/pageoptmodel.dart';
+import 'package:agrifamilyapp/models/postmodel.dart';
+import 'package:agrifamilyapp/modules/mypostfunc.dart';
 import 'package:flutter/material.dart';
 
 class MyPosts extends StatefulWidget {
@@ -6,8 +10,11 @@ class MyPosts extends StatefulWidget {
 }
 
 class _MyPostsState extends State<MyPosts> {
-  ScrollController _controller; 
-
+  late ScrollController _controller;
+  PageObjModel _pageObjModel = new PageObjModel(searchObj: "test",searchObjby: "title",pageOpt: new PageOptModel(
+    itemsPerPage: 2,page: 1,sortBy: ['title'],sortDesc: ['0']
+  ));
+  late Future<List<PostsModel>> _future;
   @override
   void initState() {
     super.initState();
@@ -15,12 +22,17 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
+    print(_pageObjModel);
+    _future = getByPage(context, _pageObjModel.toJson());
   }
 
   _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       print('reach the bottom');
+      // setState(() {
+      //     _future = getData(page);
+      //   });
     }
     if (_controller.offset <= _controller.position.minScrollExtent &&
         !_controller.position.outOfRange) {
@@ -32,7 +44,7 @@ class _MyPostsState extends State<MyPosts> {
   Widget build(BuildContext context) {
     return Container(
         child: FutureBuilder(
-      future: fetchFirstImage(),
+      future: _future,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null) {
           return Container(
@@ -59,11 +71,11 @@ class _MyPostsState extends State<MyPosts> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              // ListTile(
-                              //   leading: Icon(Icons.album),
-                              //   title: Text(snapshot.data[index].title),
-                              //   subtitle: Text(snapshot.data[index].description),
-                              // ),
+                              ListTile(
+                                leading: Icon(Icons.album),
+                                title: Text(snapshot.data[index].title),
+                                subtitle: Text(snapshot.data[index].location),
+                              ),
                             ],
                           ),
                         )),

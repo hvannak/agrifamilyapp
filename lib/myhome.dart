@@ -43,7 +43,7 @@ class _MyhomeState extends State<Myhome> {
           if(response1.statusCode == 200){
             try{
               var imagedata = jsonDecode(response1.body)[0]["image"]["data"];
-              Uint8List listdata = Uint8List.fromList((imagedata as List)?.map((e) => e as int)?.toList());
+              Uint8List listdata = Uint8List.fromList((imagedata as List).map((e) => e as int).toList());
               _listPost.add(PostModel.fromJson(jsonData[i], listdata));
             } catch(e){
               print(e);
@@ -57,7 +57,7 @@ class _MyhomeState extends State<Myhome> {
         throw Exception('Failed to load post');
       }
     } catch (e) {
-      final snackBar = SnackBar(content: Text(e));
+      final snackBar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -78,7 +78,7 @@ class _MyhomeState extends State<Myhome> {
       }
     } catch (e) {
       print(e);
-      final snackBar = SnackBar(content: Text(e));
+      final snackBar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -119,7 +119,7 @@ class _MyhomeState extends State<Myhome> {
                               //   width: 100,
                               // ),
                               // Image.memory(snapshot.data[index].image),
-                              Image.memory(snapshot.data[index].image)
+                              Image.memory(Uint8List.fromList(snapshot.data[index].image))
                               // ListTile(
                               //   leading: Icon(Icons.album),
                               //   title: Text(snapshot.data[index].title),

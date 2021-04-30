@@ -21,7 +21,7 @@ Widget buildControlTF(
           height: 60.0,
           child: TextFormField(
             controller: textEditingController,
-            validator: (val) => val.isEmpty ? label + ' is required' : null,
+            validator: (val) => val!.isEmpty ? label + ' is required' : null,
             style: kTextStyle,
             obscureText: obscure,
             decoration: InputDecoration(
@@ -54,7 +54,7 @@ Widget buildControlTF(
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          if(formKey.currentState.validate()){
+          if(formKey.currentState!.validate()){
             print('valid');
             dynamicFuc();
           }

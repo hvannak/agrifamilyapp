@@ -1,11 +1,11 @@
 
 class PostImageModel {
-   String id;
-   List<int> image;
+   String? id;
+   List<int>? image;
    String post;
-   String date;
+   String? date;
 
-  PostImageModel({this.id,this.post,this.date,this.image});
+  PostImageModel({this.id,required this.post,this.date,this.image});
 
   factory PostImageModel.fromJson(Map<String, dynamic> json) {
     return PostImageModel(

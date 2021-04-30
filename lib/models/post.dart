@@ -2,9 +2,9 @@
 import 'dart:typed_data';
 
 class PostModel {
-   String id;
+   String? id;
    String category;
-   String user;
+   String? user;
    String title;
    String description;
    String phone;
@@ -13,9 +13,9 @@ class PostModel {
    int price;
    String currency;
    Uint8List firstimage;
-   String date;
+   String? date;
 
-  PostModel({this.id,this.category,this.user,this.title,this.description,this.phone,this.email,this.location,this.price,this.currency,this.firstimage,this.date});
+  PostModel({this.id,required this.category,this.user,required this.title,required this.description,required this.phone,required this.email,required this.location,required this.price,required this.currency,required this.firstimage,this.date});
 
   factory PostModel.fromJson(Map<String, dynamic> json,Uint8List image) {
     return PostModel(

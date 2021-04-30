@@ -15,7 +15,7 @@ class MyAccount extends StatefulWidget {
 class _MyAccountState extends State<MyAccount> {
   final _formKey = GlobalKey<FormState>();
   final _formKeymodify = GlobalKey<FormState>();
-  var _userObject = UsersModel();
+  var _userObject;
   var _name = TextEditingController();
   var _email = TextEditingController();
   var _password = TextEditingController();
@@ -146,7 +146,7 @@ class _MyAccountState extends State<MyAccount> {
       child: RaisedButton(
         elevation: 2.0,
         onPressed: () {
-          if(_formKey.currentState.validate()){
+          if(_formKey.currentState!.validate()){
             logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson()).then((value) => {
               setState(() {
                 _isLogin = true;
@@ -185,7 +185,7 @@ class _MyAccountState extends State<MyAccount> {
       child: RaisedButton(
         elevation: 2.0,
         onPressed: () {
-          if(_formKey.currentState.validate()){
+          if(_formKey.currentState!.validate()){
             logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson());
           }
           else{
@@ -219,7 +219,7 @@ class _MyAccountState extends State<MyAccount> {
       child: RaisedButton(
         elevation: 2.0,
         onPressed: () {
-          if(_formKeymodify.currentState.validate()){
+          if(_formKeymodify.currentState!.validate()){
             update(context,UsersModel(id: _userObject.id,name: _name.text,email: _email.text,password: _password.text,backctl: false).toJson()).then((value) => {
               setState(() {
                 _isLogin = true;

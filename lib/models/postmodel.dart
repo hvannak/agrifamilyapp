@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PostsModel {
-   String id;
+   String? id;
    String category;
    String user;
    String title;
@@ -15,9 +15,9 @@ class PostsModel {
    String location;
    int price;
    String currency;
-   Uint8List firstimage;
+   List<int> firstimage;
    String date;
-  PostsModel({this.id,this.category,this.user,this.title,this.description,this.phone,this.email,this.location,this.price,this.currency,this.firstimage,this.date});
+  PostsModel({this.id,required this.category,required this.user,required this.title,required this.description,required this.phone,required this.email,required this.location,required this.price,required this.currency,required this.firstimage,required this.date});
   factory PostsModel.fromJson(Map<String, dynamic> json) => _$PostDataFromJson(json);
   Map<String, dynamic> toJson() => _$PostDataToJson(this);
  
@@ -35,7 +35,7 @@ PostsModel _$PostDataFromJson(Map<String, dynamic> json) {
       location: json['location'] as String,
       price: json['price'] as int,
       currency: json['currency'] as String,
-      firstimage: json['firstimage'] as Uint8List,
+      firstimage: json['firstimage'] as List<int>,
       date: json['date'] as String
   );
 }

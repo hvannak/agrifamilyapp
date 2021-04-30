@@ -1,9 +1,12 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
 class PageOptModel {
   int page;
   int itemsPerPage;
   List<String> sortBy;
   List<String> sortDesc;
-  PageOptModel({this.page,this.itemsPerPage,this.sortBy,this.sortDesc});
+  PageOptModel({required this.page,required this.itemsPerPage,required this.sortBy,required this.sortDesc});
   Map<String, dynamic> toJson() => _$PageOptDataToJson(this);
 }
 
