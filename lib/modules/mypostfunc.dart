@@ -12,8 +12,10 @@ Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> inst
       print(instance);
       var response = await ApiHelpers.fetchPostWithAuth('/posts/pageclient',instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
-        var list = jsonDecode(response.body) as List;
+        print(response.body);
+        var list = jsonDecode(response.body)['objList'] as List;
         List<Postmodel> postList = list.map((i) => Postmodel.fromJson(i)).toList();
+        print(postList.length);
         return postList;
       } else {
         throw (response.statusCode.toString());

@@ -6,7 +6,7 @@ class Pageoptmodel {
   int page;
   int itemsPerPage;
   List<String> sortBy;
-  List<String> sortDesc;
+  List<bool> sortDesc;
   Pageoptmodel(this.page,this.itemsPerPage,this.sortBy,this.sortDesc);
   factory Pageoptmodel.fromJson(Map<String, dynamic> json) => _$PageoptmodelFromJson(json);
   Map<String, dynamic> toJson() => _$PageoptmodelToJson(this);

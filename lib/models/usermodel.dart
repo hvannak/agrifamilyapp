@@ -4,6 +4,7 @@ part 'usermodel.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Usermodel {
+   @JsonKey(name: "_id")
    String? id;
    late String name;
    String email;
@@ -16,3 +17,8 @@ class Usermodel {
   Map<String, dynamic> toJson() => _$UsermodelToJson(this);
   Map<String, dynamic> toLoginJson() => _$UsermodelLoginToJson(this);
 }
+
+Map<String, dynamic> _$UsermodelLoginToJson(Usermodel instance) => <String, dynamic>{
+    'email': instance.email,
+    'password': instance.password
+    };

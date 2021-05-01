@@ -12,7 +12,7 @@ class MyPosts extends StatefulWidget {
 class _MyPostsState extends State<MyPosts> {
   late ScrollController _controller;
   Pageobjmodel _pageObjModel = new Pageobjmodel("test","title",new Pageoptmodel(
-    2,1,['title'],['0']
+    2,1,['title'],[false]
   ));
   late Future<List<Postmodel>> _future;
   @override
@@ -22,7 +22,6 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    print(_pageObjModel);
     _future = getByPage(context, _pageObjModel.toJson());
   }
 

@@ -11,7 +11,7 @@ Pageoptmodel _$PageoptmodelFromJson(Map<String, dynamic> json) {
     json['page'] as int,
     json['itemsPerPage'] as int,
     (json['sortBy'] as List<dynamic>).map((e) => e as String).toList(),
-    (json['sortDesc'] as List<dynamic>).map((e) => e as String).toList(),
+    (json['sortDesc'] as List<dynamic>).map((e) => e as bool).toList(),
   );
 }
 

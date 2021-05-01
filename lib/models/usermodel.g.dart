@@ -25,8 +25,3 @@ Map<String, dynamic> _$UsermodelToJson(Usermodel instance) => <String, dynamic>{
       'backctl': instance.backctl,
       'date': instance.date,
     };
-
-Map<String, dynamic> _$UsermodelLoginToJson(Usermodel instance) => <String, dynamic>{
-    'email': instance.email,
-    'password': instance.password
-    };
