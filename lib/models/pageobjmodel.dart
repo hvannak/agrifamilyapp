@@ -1,18 +1,13 @@
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:json_annotation/json_annotation.dart';
+part 'pageobjmodel.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class PageObjModel {
+class Pageobjmodel {
   String? searchObj;
   String? searchObjby;
-  PageOptModel pageOpt;
-  PageObjModel({this.searchObj,this.searchObjby,required this.pageOpt});
-  Map<String, dynamic> toJson() => _$PageObjDataToJson(this);
+  Pageoptmodel pageOpt;
+  Pageobjmodel(this.searchObj,this.searchObjby,this.pageOpt);
+  factory Pageobjmodel.fromJson(Map<String, dynamic> json) => _$PageobjmodelFromJson(json);
+  Map<String, dynamic> toJson() => _$PageobjmodelToJson(this);
 }
-
-
-Map<String, dynamic> _$PageObjDataToJson(PageObjModel instance) => <String, dynamic>{
-    'searchObj': instance.searchObj,
-    'searchObjby':instance.searchObjby,
-    'pageOpt': instance.pageOpt
-    };

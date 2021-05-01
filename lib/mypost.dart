@@ -11,10 +11,10 @@ class MyPosts extends StatefulWidget {
 
 class _MyPostsState extends State<MyPosts> {
   late ScrollController _controller;
-  PageObjModel _pageObjModel = new PageObjModel(searchObj: "test",searchObjby: "title",pageOpt: new PageOptModel(
-    itemsPerPage: 2,page: 1,sortBy: ['title'],sortDesc: ['0']
+  Pageobjmodel _pageObjModel = new Pageobjmodel("test","title",new Pageoptmodel(
+    2,1,['title'],['0']
   ));
-  late Future<List<PostsModel>> _future;
+  late Future<List<Postmodel>> _future;
   @override
   void initState() {
     super.initState();

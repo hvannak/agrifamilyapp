@@ -1,18 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
+part 'pageoptmodel.g.dart';
 
 @JsonSerializable()
-class PageOptModel {
+class Pageoptmodel {
   int page;
   int itemsPerPage;
   List<String> sortBy;
   List<String> sortDesc;
-  PageOptModel({required this.page,required this.itemsPerPage,required this.sortBy,required this.sortDesc});
-  Map<String, dynamic> toJson() => _$PageOptDataToJson(this);
+  Pageoptmodel(this.page,this.itemsPerPage,this.sortBy,this.sortDesc);
+  factory Pageoptmodel.fromJson(Map<String, dynamic> json) => _$PageoptmodelFromJson(json);
+  Map<String, dynamic> toJson() => _$PageoptmodelToJson(this);
 }
 
-Map<String, dynamic> _$PageOptDataToJson(PageOptModel instance) => <String, dynamic>{
-    'page': instance.page,
-    'itemsPerPage':instance.itemsPerPage,
-    'sortBy': instance.sortBy,
-    'sortDesc': instance.sortDesc
-    };
+// Map<String, dynamic> _$PageOptDataToJson(PageOptModel instance) => <String, dynamic>{
+//     'page': instance.page,
+//     'itemsPerPage':instance.itemsPerPage,
+//     'sortBy': instance.sortBy,
+//     'sortDesc': instance.sortDesc
+//     };

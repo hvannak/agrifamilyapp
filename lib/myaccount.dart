@@ -147,7 +147,7 @@ class _MyAccountState extends State<MyAccount> {
         elevation: 2.0,
         onPressed: () {
           if(_formKey.currentState!.validate()){
-            logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson()).then((value) => {
+            logIn(context,Usermodel.login(_email.text,_password.text).toLoginJson()).then((value) => {
               setState(() {
                 _isLogin = true;
                 _userObject = value;
@@ -186,7 +186,7 @@ class _MyAccountState extends State<MyAccount> {
         elevation: 2.0,
         onPressed: () {
           if(_formKey.currentState!.validate()){
-            logIn(context,UsersModel.login(email: _email.text,password: _password.text).toLoginJson());
+            logIn(context,Usermodel.login(_email.text,_password.text).toLoginJson());
           }
           else{
             final snackBar = SnackBar(content: Text('Please verify your input.'));
@@ -220,7 +220,7 @@ class _MyAccountState extends State<MyAccount> {
         elevation: 2.0,
         onPressed: () {
           if(_formKeymodify.currentState!.validate()){
-            update(context,UsersModel(id: _userObject.id,name: _name.text,email: _email.text,password: _password.text,backctl: false).toJson()).then((value) => {
+            update(context,Usermodel(_userObject.id,_name.text,_password.text,false,_email.text,null).toJson()).then((value) => {
               setState(() {
                 _isLogin = true;
                 _userObject = value;
