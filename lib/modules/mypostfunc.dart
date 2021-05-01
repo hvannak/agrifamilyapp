@@ -7,17 +7,20 @@ import 'package:flutter/material.dart';
 
 import 'mygeneralfunc.dart';
 
+List<Postmodel> listPost = [];
+int totalDoc = 0;
+
 Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> instance) async {
     try {
-      print(instance);
       var response = await ApiHelpers.fetchPostWithAuth('/posts/pageclient',instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
-        print(response.body);
         var list = jsonDecode(response.body)['objList'] as List;
-        List<Postmodel> postList = list.map((i) => Postmodel.fromJson(i)).toList();
-        print(postList.length);
-        return postList;
+        totalDoc = jsonDecode(response.body)['totalDoc'] as int;
+        listPost.addAll(list.map((i) => Postmodel.fromJson(i)).toList());
+        print(listPost.length);
+        return listPost;
       } else {
+        print(response.statusCode.toString());
         throw (response.statusCode.toString());
       }
     } on SocketException catch (e) {
@@ -25,6 +28,7 @@ Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> inst
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       throw(e);
     } on Exception catch (e) {
+      print(e.toString());
       throw (e);
     }
   }

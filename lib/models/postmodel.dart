@@ -12,9 +12,9 @@ class Postmodel {
    String user;
    String title;
    String description;
-   String phone;
-   String email;
-   String location;
+   String? phone;
+   String? email;
+   String? location;
    int price;
    String currency;
    List<int>? firstimage;
