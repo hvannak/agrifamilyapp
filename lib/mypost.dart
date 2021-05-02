@@ -24,9 +24,8 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    _pageObjModel = new Pageobjmodel(null,null,new Pageoptmodel(
-      _currentPage,_pageSize,['title'],[false]
-    ));
+    _pageObjModel = new Pageobjmodel(null, null,
+        new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
     _future = getByPage(context, _pageObjModel.toJson());
   }
 
@@ -34,14 +33,13 @@ class _MyPostsState extends State<MyPosts> {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       print('reach the bottom');
-      _currentPage +=1;
-      _pageObjModel = new Pageobjmodel(null,null,new Pageoptmodel(
-        _currentPage,_pageSize,['title'],[false]
-      ));
-      var totalPage = (totalDoc/_pageSize).ceil();
-      if(_currentPage <= totalPage){
+      _currentPage += 1;
+      _pageObjModel = new Pageobjmodel(null, null,
+          new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
+      var totalPage = (totalDoc / _pageSize).ceil();
+      if (_currentPage <= totalPage) {
         setState(() {
-          _future = getByPage(context,_pageObjModel.toJson());
+          _future = getByPage(context, _pageObjModel.toJson());
         });
       }
     }
@@ -49,60 +47,86 @@ class _MyPostsState extends State<MyPosts> {
         !_controller.position.outOfRange) {
       print('reach the top');
     }
- }
-  
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+          child: FutureBuilder(
+        future: _future,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+                child: Center(
+                    child: SizedBox(
+              child: CircularProgressIndicator(),
+              width: 60,
+              height: 60,
+            )));
+          } else {
+            return ListView.builder(
+              controller: _controller,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (moreLoad && index == listPost.length - 1) {
+                  return CupertinoActivityIndicator();
+                }
+                return Container(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Card(
+                              shadowColor: Colors.blue,
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: Icon(Icons.album),
+                                      title: Text(snapshot.data[index].title),
+                                      subtitle:
+                                          Text(snapshot.data[index].location),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        )
+                      ],
+                    ));
+              },
+            );
+          }
+        },
+      )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context,rootNavigator: false).push(
+            MaterialPageRoute(builder: (context) => MyEditPosts(),maintainState: false)
+          );
+        },
+        child: const Icon(Icons.navigation),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+}
+
+//My Edit Post
+class MyEditPosts extends StatefulWidget {
+  @override
+  _MyEditPostsState createState() => _MyEditPostsState();
+}
+
+class _MyEditPostsState extends State<MyEditPosts> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: FutureBuilder(
-      future: _future,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.data == null) {
-          return Container(
-              child: Center(
-                  child: SizedBox(
-            child: CircularProgressIndicator(),
-            width: 60,
-            height: 60,
-          )));
-        } else {
-          return ListView.builder(
-            controller: _controller,
-            physics: AlwaysScrollableScrollPhysics(),          
-            itemCount: snapshot.data.length,           
-            itemBuilder: (BuildContext context, int index) {
-              if(moreLoad && index == listPost.length -1){
-                return CupertinoActivityIndicator();
-              }
-              return Container(
-                height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Card(
-                        shadowColor: Colors.blue,
-                        child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: Icon(Icons.album),
-                              title: Text(snapshot.data[index].title),
-                              subtitle: Text(snapshot.data[index].location),
-                            ),
-                          ],
-                        ),
-                      )),
-                    )
-                  ],
-                ));
-              
-            },
-          );
-        }
-      },
-    ));
+      
+    );
   }
 }
