@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'mypost.dart';
 import 'myaccount.dart';
 import 'myhome.dart';
+import 'mypost.dart';
 
 void main() {
   runApp(MyApp());

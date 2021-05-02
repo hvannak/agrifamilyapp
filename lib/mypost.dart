@@ -2,6 +2,7 @@ import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/mypostfunc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -14,7 +15,7 @@ class _MyPostsState extends State<MyPosts> {
   late ScrollController _controller;
   late Future<List<Postmodel>> _future;
   int _currentPage = 1;
-  int _pageSize = 10;
+  int _pageSize = 7;
   late Pageobjmodel _pageObjModel;
   @override
   void initState() {
@@ -29,7 +30,7 @@ class _MyPostsState extends State<MyPosts> {
     _future = getByPage(context, _pageObjModel.toJson());
   }
 
-  _scrollListener() {
+  _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       print('reach the bottom');
@@ -41,7 +42,6 @@ class _MyPostsState extends State<MyPosts> {
       if(_currentPage <= totalPage){
         setState(() {
           _future = getByPage(context,_pageObjModel.toJson());
-                  
         });
       }
     }
@@ -68,32 +68,37 @@ class _MyPostsState extends State<MyPosts> {
         } else {
           return ListView.builder(
             controller: _controller,
-            itemCount: snapshot.data.length,
+            physics: AlwaysScrollableScrollPhysics(),          
+            itemCount: snapshot.data.length,           
             itemBuilder: (BuildContext context, int index) {
+              if(moreLoad && index == listPost.length -1){
+                return CupertinoActivityIndicator();
+              }
               return Container(
-                  height: 120,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Card(
-                          shadowColor: Colors.blue,
-                          child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                leading: Icon(Icons.album),
-                                title: Text(snapshot.data[index].title),
-                                subtitle: Text(snapshot.data[index].location),
-                              ),
-                            ],
-                          ),
-                        )),
-                      )
-                    ],
-                  ));
+                height: 120,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Card(
+                        shadowColor: Colors.blue,
+                        child: Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.album),
+                              title: Text(snapshot.data[index].title),
+                              subtitle: Text(snapshot.data[index].location),
+                            ),
+                          ],
+                        ),
+                      )),
+                    )
+                  ],
+                ));
+              
             },
           );
         }

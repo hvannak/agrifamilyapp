@@ -9,15 +9,18 @@ import 'mygeneralfunc.dart';
 
 List<Postmodel> listPost = [];
 int totalDoc = 0;
+bool moreLoad = false;
 
 Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> instance) async {
     try {
+      moreLoad = true;
       var response = await ApiHelpers.fetchPostWithAuth('/posts/pageclient',instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
         var list = jsonDecode(response.body)['objList'] as List;
         totalDoc = jsonDecode(response.body)['totalDoc'] as int;
         listPost.addAll(list.map((i) => Postmodel.fromJson(i)).toList());
         print(listPost.length);
+        moreLoad = false;
         return listPost;
       } else {
         print(response.statusCode.toString());
