@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'modules/mypostfunc.dart';
 import 'myaccount.dart';
 import 'myhome.dart';
 import 'mypost.dart';
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      resetPostFunc(context);
     });
   }
 

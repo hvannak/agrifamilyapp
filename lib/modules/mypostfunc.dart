@@ -36,6 +36,12 @@ Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> inst
     }
   }
 
+resetPostFunc(BuildContext context) {
+  listPost = [];
+  totalDoc = 0;
+  moreLoad = false;
+}
+
 // Future<List<PostsModel>> fetchLeaveData() async {
 //     try {
 //       var response = await _apiHelper.fetchData(
