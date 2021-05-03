@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Widgets/mainwidget.dart';
 import 'modules/mypostfunc.dart';
 import 'myaccount.dart';
 import 'myhome.dart';
@@ -33,11 +34,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    Myhome(),
-    MyPosts(),
-    MyAccount()
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,34 +45,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Image.network(
-            'https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
-        ],
-      ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'HOME',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'POSTS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'ACCOUNTS',
-          ),
-        ],
+        items: widgetBottomNav,
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+        onTap: _onItemTapped,      
       ),
     );
   }

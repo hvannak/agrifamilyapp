@@ -1,3 +1,4 @@
+import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
@@ -52,6 +53,12 @@ class _MyPostsState extends State<MyPosts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+        leading: Icon(Icons.data_usage),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
+      ),
       body: Container(
           child: FutureBuilder(
         future: _future,
@@ -105,8 +112,9 @@ class _MyPostsState extends State<MyPosts> {
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context,rootNavigator: false).push(
-            MaterialPageRoute(builder: (context) => MyEditPosts(),maintainState: false)
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyEditPosts()),
           );
         },
         child: const Icon(Icons.navigation),
@@ -123,10 +131,27 @@ class MyEditPosts extends StatefulWidget {
 }
 
 class _MyEditPostsState extends State<MyEditPosts> {
+
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      resetPostFunc(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      appBar: AppBar(title: Text('Edit Post'),),
+      body: Text('Edit'),
+      bottomNavigationBar: BottomNavigationBar(
+        items: widgetBottomNav,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,      
+      ),
     );
   }
 }

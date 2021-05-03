@@ -84,8 +84,14 @@ class _MyhomeState extends State<Myhome> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Home Screen'),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Icon(Icons.home),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
+      ),
+      body: Center(child: Text('Home Screen'),),
     );
     // return Container(
     //     child: FutureBuilder(

@@ -1,3 +1,4 @@
+import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/models/usermodel.dart';
 import 'package:agrifamilyapp/modules/myaccountfunc.dart';
@@ -5,7 +6,6 @@ import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:flutter/material.dart';
 
 import 'Helpers/constants.dart';
-import 'formcontrols/formcontrols.dart';
 
 class MyAccount extends StatefulWidget {
   @override
