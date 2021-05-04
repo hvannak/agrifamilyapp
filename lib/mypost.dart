@@ -189,6 +189,25 @@ class _MyEditPostsState extends State<MyEditPosts> {
           )
         ))
       ),
+      floatingActionButtonLocation:
+              FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton(
+                  onPressed: () {},                 
+                  child: Icon(Icons.camera_alt),
+                ),
+                SizedBox(height: 20),
+                FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.save),
+                )
+              ],
+            ),
+          ),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
         currentIndex: _selectedIndex,
