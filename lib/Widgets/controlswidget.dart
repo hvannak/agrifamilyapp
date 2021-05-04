@@ -184,6 +184,27 @@ Widget buildControlDropdownTF(
     );
   }
 
+  // Widget buildImage() {
+  //   return Container(
+  //       padding: EdgeInsets.symmetric(vertical: 25.0),
+  //       width: double.infinity,
+  //       child:
+  //           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+  //         Container(
+  //           child: _imagePath == ''
+  //               ? Image.asset(
+  //                   'assets/images/user.png',
+  //                   color: Colors.white,
+  //                   height: 180.0,
+  //                   width: 180.0,
+  //                 )
+  //               : Image.file(File(_imagePath)),
+  //           width: 300.0,
+  //           height: 300.0,
+  //         )
+  //       ]));
+  // }
+
   // Widget buildControlDateChangeTF(
   //     BuildContext context,
   //     String label,

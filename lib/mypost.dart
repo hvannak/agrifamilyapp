@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/mypostfunc.dart';
+import 'package:agrifamilyapp/takephoto.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -148,11 +153,27 @@ class _MyEditPostsState extends State<MyEditPosts> {
     return listCurrency;
   }
 
+  var _firstCamera;
+  String _imagePath = '';
+  String _imagebase64 = '';
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       resetPostFunc(context);
     });
+  }
+
+  Future<void> _initCamera() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final cameras = await availableCameras();
+    _firstCamera = cameras.first;
+  }
+
+  @override
+  void initState() {
+    _initCamera();
+    super.initState();
   }
 
   @override
@@ -197,13 +218,21 @@ class _MyEditPostsState extends State<MyEditPosts> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 FloatingActionButton(
-                  onPressed: () {},                 
+                  key: UniqueKey(),
+                  heroTag: 'btnCamera',
+                  onPressed: () {
+                    _navigateTakePictureScreen(context);
+                  },                 
                   child: Icon(Icons.camera_alt),
+                  backgroundColor: Colors.green,
                 ),
                 SizedBox(height: 20),
                 FloatingActionButton(
+                  key: UniqueKey(),
+                  heroTag: 'btnSave',
                   onPressed: () {},
                   child: Icon(Icons.save),
+                  backgroundColor: Colors.green,
                 )
               ],
             ),
@@ -215,5 +244,22 @@ class _MyEditPostsState extends State<MyEditPosts> {
         onTap: _onItemTapped,      
       ),
     );
+  }
+
+  _navigateTakePictureScreen(BuildContext context) async {
+    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TakePhoto(key: UniqueKey(),camera: _firstCamera),fullscreenDialog: true),
+                    );
+    imageCache!.clear();
+    setState(() {
+      _imagePath = result;
+      File imagefile = new File(_imagePath);
+      List<int> imageBytes = imagefile.readAsBytesSync();
+      _imagebase64 = "data:image/png;base64," + base64Encode(imageBytes);
+    });
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text("Image is captured")));
   }
 }
