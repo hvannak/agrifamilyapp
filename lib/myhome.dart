@@ -66,9 +66,12 @@ class _MyhomeState extends State<Myhome> {
 
   reInstantiateImageCodec(List<int> buffer){
     Uint8List listdata = Uint8List.fromList(buffer);
-    String str = new String.fromCharCodes(listdata);
-    String removeMine = str.split(",")[1];
-    return new Uint8List.fromList(removeMine.codeUnits);              
+    var reduce = listdata.reduce((value, element) => value+element);
+    return reduce;
+    // String str = new String.fromCharCodes(listdata);
+    // String removeMine = str.split(",")[1];
+    // print(removeMine);
+    // return new Uint8List.fromList(removeMine.codeUnits);              
   }
 
   fetchFirstImage() async {
