@@ -97,9 +97,9 @@ class TakePictureScreenState extends State<TakePhoto> {
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
             // await _controller.takePicture(_path);
-            await _controller.takePicture();
+            var xFile = await _controller.takePicture();
 
-            Navigator.of(context).pop(_path);
+            Navigator.of(context).pop(xFile.path);
             //  Navigator.pop(context, base64Image);
           } catch (e) {
             // If an error occurs, log the error to the console.

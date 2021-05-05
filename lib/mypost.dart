@@ -203,7 +203,13 @@ class _MyEditPostsState extends State<MyEditPosts> {
                                       Icons.location_city,false, true),
                 buildControlTF(context, 'Price', _price,
                                       Icons.money,false, true),
-                buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp)
+                buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
+                (_imagePath=='') ? Text('Image') : Container(
+                  height: 50,
+                  width: 50,
+                  child: Image.file(File(_imagePath),
+                  fit: BoxFit.cover,
+                ))
               ],
             )
           ),
@@ -251,6 +257,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
                       context,
                       MaterialPageRoute(builder: (context) => TakePhoto(key: UniqueKey(),camera: _firstCamera),fullscreenDialog: true),
                     );
+    print(result);
     imageCache!.clear();
     setState(() {
       _imagePath = result;
@@ -258,8 +265,6 @@ class _MyEditPostsState extends State<MyEditPosts> {
       List<int> imageBytes = imagefile.readAsBytesSync();
       _imagebase64 = "data:image/png;base64," + base64Encode(imageBytes);
     });
-    Scaffold.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text("Image is captured")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image is captured")));
   }
 }
