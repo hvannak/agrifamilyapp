@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
+import 'Helpers/constants.dart';
+
 
 class Myhome extends StatefulWidget {
   @override
@@ -17,7 +19,6 @@ class Myhome extends StatefulWidget {
 
 class _MyhomeState extends State<Myhome> {
   List<Postdisplaymodel> _listPost = [];
-  List<Postmodel> _listPostImage = [];
 
   fetchPosts() async {
     try {
@@ -33,9 +34,6 @@ class _MyhomeState extends State<Myhome> {
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
 
       if (response.statusCode == 200) {
-        print(response.body);
-        // var list = jsonDecode(response.body)["objList"] as List;
-        // _listPost = list.map((i) => Postdisplaymodel.fromJson(i)).toList();
         var jsonData = jsonDecode(response.body)["objList"] as List;
         for (var i = 0; i < jsonData.length; i++) {
           final response1 = await http.get(
@@ -51,9 +49,7 @@ class _MyhomeState extends State<Myhome> {
               print(e);
             }
           }
-          print('list length:' + _listPost.length.toString());
         }
-
         return _listPost;
       } else {
         throw Exception('Failed to load post');
@@ -65,34 +61,9 @@ class _MyhomeState extends State<Myhome> {
   }
 
   reInstantiateImageCodec(List<int> buffer){
-    Uint8List listdata = Uint8List.fromList(buffer);
-    var reduce = listdata.reduce((value, element) => value+element);
-    return reduce;
-    // String str = new String.fromCharCodes(listdata);
-    // String removeMine = str.split(",")[1];
-    // print(removeMine);
-    // return new Uint8List.fromList(removeMine.codeUnits);              
-  }
-
-  fetchFirstImage() async {
-    try {
-      final response = await http.get(
-          Uri.parse('https://agrifamily.herokuapp.com/api/posts/getFirstImage/' + "6067be61e0a52c0022ea1916"),
-          headers: {HttpHeaders.contentTypeHeader: 'application/json'});
-      if (response.statusCode == 200) {
-        var list = jsonDecode(response.body) as List;
-        // _listPostImage = list.map((i) => ImageData.fromJson(i)).toList();
-        // print(_listPostImage[1].image);
-        return _listPostImage;
-        // return _listPostImage.add(ImageData.fromJson(jsonDecode(response.body)[0]));
-      } else {
-        throw Exception('Failed to load post');
-      }
-    } catch (e) {
-      print(e);
-      final snackBar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
+    String str = new String.fromCharCodes(buffer).split(",")[1];
+    var base64 = base64Decode(str);  
+    return base64;            
   }
 
   @override
@@ -109,7 +80,7 @@ class _MyhomeState extends State<Myhome> {
       future: fetchPosts(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null) {
-          return Container(
+           return Container(
               child: Center(
                   child: SizedBox(
             child: CircularProgressIndicator(),
@@ -122,9 +93,10 @@ class _MyhomeState extends State<Myhome> {
             itemBuilder: (BuildContext context, int index) {
               return Container(
                   height: 300,
+                  color: Colors.grey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
+                    children: <Widget>[ 
                       Expanded(
                         child: Card(
                           child: Padding(
@@ -132,9 +104,32 @@ class _MyhomeState extends State<Myhome> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Image.memory(reInstantiateImageCodec(snapshot.data[index].firstimage)),
+                              Stack(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Image.memory(reInstantiateImageCodec(snapshot.data[index].firstimage),
+                                    fit: BoxFit.cover,
+                                    height: 180,),
+                                  ),
+                                  Positioned(
+                                    top: -20,
+                                    right: 10,
+                                    child: Container(
+                                    alignment: Alignment.topRight,
+                                    child: CircleAvatar(                                  
+                                    child: ClipOval(
+                                      child:Text(snapshot.data[index].price.toString() + " " + snapshot.data[index].currency,
+                                      style: headertextStyle),
+                                    ),
+                                    radius: 50,
+                                    backgroundColor: Colors.lightGreen,
+                                  ),
+                                  ))
+                                ],
+                              ),                     
                               ListTile(
-                                leading: Icon(Icons.album),
+                                leading: Icon(Icons.info,color: Colors.green,),
                                 title: Text(snapshot.data[index].title),
                                 subtitle: Text(snapshot.data[index].description),
                               ),
