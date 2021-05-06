@@ -33,6 +33,13 @@ static Future<http.Response> fetchDataWithAuth(String url, String token) async {
     return response;
   }
 
+static Future<http.Response> fetchData(String url) async {
+    final response = await http.get(Uri.parse(_urlSetting+ url), headers: {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    });
+    return response;
+  }
+
 static Future<http.Response> fetchPutWithAuth(
       String url,body,String token) async {
     var response = await http.put(Uri.parse(_urlSetting + url),
