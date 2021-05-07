@@ -2,28 +2,24 @@ import 'dart:convert';
 
 import 'package:agrifamilyapp/Helpers/apiHelpers.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
+import 'package:agrifamilyapp/models/postimagemodel.dart';
 import 'package:flutter/material.dart';
 
-List<Postdisplaymodel> _listPost = [];
+List<Postdisplaymodel> listDisplayPost = [];
+int totalDoc = 0;
+bool moreLoad = false;
 
-  fetchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async {
+  Future<List<Postdisplaymodel>> fetchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async {
     try {
-      // var body = {
-      //   'searchObj': 't',
-      //   'categoryId': '-1',
-      //   'pageOpt': {'itemsPerPage': 9, 'page': 1}
-      // };
-
-      // final response = await http.post(
-      //     Uri.parse('https://agrifamily.herokuapp.com/api/posts/searchByCat'),
-      //     body: json.encode(body),
-      //     headers: {HttpHeaders.contentTypeHeader: 'application/json'});
-
+      moreLoad = true;
       final response = await ApiHelpers.fetchPost('/posts/searchByCat', instance);
-
       if (response.statusCode == 200) {
         var list = jsonDecode(response.body)["objList"] as List;
-        _listPost.addAll(list.map((i) => Postdisplaymodel.fromJson(i)).toList());      
+        totalDoc = jsonDecode(response.body)["totalDoc"];
+        listDisplayPost.addAll(list.map((i) => Postdisplaymodel.fromJson(i)).toList());
+        moreLoad = false;
+        print(listDisplayPost.length);
+        return listDisplayPost;      
       } else {
         print(response.statusCode.toString());
         throw (response.statusCode.toString());
@@ -31,19 +27,26 @@ List<Postdisplaymodel> _listPost = [];
     } catch (e) {
       final snackBar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
     }
   }
 
-  fetchFirstImagePost(BuildContext context,String postId) async{
+  Future<Postimagemodel> fetchFirstImagePost(BuildContext context,String postId) async{
     try{
       final response = await ApiHelpers.fetchData('/posts/getFirstImage/' + postId);
       if (response.statusCode == 200) {
-        List<dynamic> imagedata = jsonDecode(response.body)["image"]["data"];
+         var obj = jsonDecode(response.body);
+         Postimagemodel postImage = Postimagemodel.fromJson(obj);
+        return postImage;
+      } else {
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
       }
     }
     catch(e){
       final snackBar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw(e);
     }
   }
 
