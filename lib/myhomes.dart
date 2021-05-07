@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'Helpers/constants.dart';
+import 'Widgets/controlswidget.dart';
 
 
 class Myhome extends StatefulWidget {
@@ -27,6 +28,7 @@ class _MyhomeState extends State<Myhome> {
   int _currentPage = 1;
   int _pageSize = 6;
   late Pageobjmodel _pageObjModel;
+  var _searchText = TextEditingController();
 
   @override
   void initState() {
@@ -65,8 +67,11 @@ class _MyhomeState extends State<Myhome> {
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.home),
+        title: buildSearchControl(_searchText,'Search Data'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
+          IconButton(icon: Icon(Icons.search), onPressed: () {
+             
+          })
         ],
       ),
       body: Container(

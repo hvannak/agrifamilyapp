@@ -8,6 +8,12 @@ final kHintTextStyle = TextStyle(
   fontFamily: 'OpenSans',
 );
 
+final kHintSearchTextStyle = TextStyle(
+  color: Colors.grey,
+  backgroundColor: Colors.white,  
+  fontFamily: 'OpenSans',
+);
+
 final kLabelStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,

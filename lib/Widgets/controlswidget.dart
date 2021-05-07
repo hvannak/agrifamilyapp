@@ -2,6 +2,20 @@ import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+Widget buildSearchControl(TextEditingController textEditingController,String label){
+  return TextFormField(
+          controller: textEditingController,
+          validator: (val) => val!.isEmpty ? label + ' is required' : null,
+          style: kTextStyle,                 
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(2),
+            hintText: label,           
+            errorStyle: kErrorTextStyle,
+            hintStyle: kHintSearchTextStyle,
+          )
+        );
+}
+
 Widget buildControlTF(
     BuildContext context,
     String label,
