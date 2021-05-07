@@ -34,8 +34,8 @@ class _MyhomeState extends State<Myhome> {
     _controller.addListener(() {
       _scrollListener();
     });
-    _pageObjModel = new Pageobjmodel("t", "t","-1",
-        new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
+    _pageObjModel = new Pageobjmodel(null, null,"-1",
+        new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
     _future = fetchDisplayPosts(context, _pageObjModel.toJson());
     super.initState();
   }
@@ -45,10 +45,8 @@ class _MyhomeState extends State<Myhome> {
         !_controller.position.outOfRange) {
       print('reach the bottom');
       _currentPage += 1;
-      print(_currentPage);
-      _pageObjModel = new Pageobjmodel("t", 't',"-1",
-          new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
-      print(totalDoc);
+      _pageObjModel = new Pageobjmodel(null, null,"-1",
+          new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
       var totalPage = (totalDoc / _pageSize).ceil();
       if (_currentPage <= totalPage) {
         setState(() {

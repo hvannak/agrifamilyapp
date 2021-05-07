@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Widgets/mainwidget.dart';
 import 'modules/mypostfunc.dart';
+import 'modules/myhomefunc.dart';
 import 'myaccount.dart';
 import 'myhome.dart';
 import 'mypost.dart';
@@ -39,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
       resetPostFunc(context);
+      resetHomeFunc(context);
     });
   }
 

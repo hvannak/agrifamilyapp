@@ -55,3 +55,9 @@ bool moreLoad = false;
     var base64 = base64Decode(str);  
     return base64;            
   }
+
+  resetHomeFunc(BuildContext context) {
+  listDisplayPost = [];
+  totalDoc = 0;
+  moreLoad = false;
+}
