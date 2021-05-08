@@ -3,11 +3,14 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/myhomefunc.dart';
+import 'package:agrifamilyapp/myhomesearch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +31,6 @@ class _MyhomeState extends State<Myhome> {
   int _currentPage = 1;
   int _pageSize = 6;
   late Pageobjmodel _pageObjModel;
-  var _searchText = TextEditingController();
 
   @override
   void initState() {
@@ -64,16 +66,7 @@ class _MyhomeState extends State<Myhome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.home),
-        title: buildSearchControl(_searchText,'Search Data'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {
-             
-          })
-        ],
-      ),
+    return Scaffold(     
       body: Container(
         child: FutureBuilder(
       future: _future,
@@ -162,6 +155,18 @@ class _MyhomeState extends State<Myhome> {
       },
     )
     ),
+    floatingActionButton: FloatingActionButton(
+        key: UniqueKey(),
+        heroTag: 'btnSearch',
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Myhomesearch()),
+          );
+        },                 
+        child: Icon(Icons.search_rounded),
+        backgroundColor: Colors.green,
+      )
     );
     
   }
