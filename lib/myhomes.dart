@@ -158,11 +158,12 @@ class _MyhomeState extends State<Myhome> {
     floatingActionButton: FloatingActionButton(
         key: UniqueKey(),
         heroTag: 'btnSearch',
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final isSearching = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Myhomesearch()),
           );
+          print(isSearching);
         },                 
         child: Icon(Icons.search_rounded),
         backgroundColor: Colors.green,

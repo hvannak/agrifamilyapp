@@ -61,3 +61,28 @@ bool moreLoad = false;
   totalDoc = 0;
   moreLoad = false;
 }
+
+Future<List<Postdisplaymodel>> fetchSearchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async {
+    try {
+      moreLoad = true;
+      final response = await ApiHelpers.fetchPost('/posts/searchdetails', instance);
+      if (response.statusCode == 200) {
+        if(instance["pageOpt"]["page"] == 1) {
+          listDisplayPost = [];
+        }
+        var list = jsonDecode(response.body)["objList"] as List;
+        totalDoc = jsonDecode(response.body)["totalDoc"];
+        listDisplayPost.addAll(list.map((i) => Postdisplaymodel.fromJson(i)).toList());
+        moreLoad = false;
+        print(listDisplayPost.length);
+        return listDisplayPost;      
+      } else {
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
+    }
+  }

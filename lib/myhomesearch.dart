@@ -1,6 +1,8 @@
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
 import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
+import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:flutter/material.dart';
 
 class Myhomesearch extends StatefulWidget {
@@ -33,59 +35,59 @@ class _MyhomesearchState extends State<Myhomesearch> {
           child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               child: Card(
-                shadowColor: Colors.blueGrey,
+                  shadowColor: Colors.blueGrey,
                   child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Form(
-                    key: _formKeymodify,
-                    child: Column(
-                      children: [
-                        buildControlTF(
-                            context, 'Title', _title, Icons.title, false, true),
-                        buildControlTF(context, 'Description', _description,
-                            Icons.description, false, true),
-                        buildControlTF(
-                            context, 'Phone', _phone, Icons.phone, false, true),
-                        buildControlTF(
-                            context, 'Email', _email, Icons.email, false, true),
-                        buildControlTF(context, 'Location', _location,
-                            Icons.location_city, false, true),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                flex: 40,
-                                child: Column(
-                                  children: <Widget>[
-                                    buildControlTF(context, 'From Price', _price,
-                                        Icons.money, false, true)
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 2),
-                              Expanded(
-                                flex: 20,
-                                child: Column(
-                                  children: <Widget>[
-                                    buildCurrencyBtn()
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 2),
-                              Expanded(
-                                flex: 40,
-                                child: Column(
-                                  children: <Widget>[
-                                    buildControlTF(context, 'To Price', _price,
-                                        Icons.money, false, true)
-                                  ],
-                                ),
-                              ),
-                            ]),
-                        buildSearchBtn(context)
-                      ],
-                    )),
-              )))),
+                    padding: EdgeInsets.all(10),
+                    child: Form(
+                        key: _formKeymodify,
+                        child: Column(
+                          children: [
+                            buildControlDropdownCategory(context,'Category',null,fetchAllCategory(context),Icons.category),
+                            buildControlTF(context, 'Title', _title,
+                                Icons.title, false, true),
+                            buildControlTF(context, 'Description', _description,
+                                Icons.description, false, true),
+                            buildControlTF(context, 'Phone', _phone,
+                                Icons.phone, false, true),
+                            buildControlTF(context, 'Email', _email,
+                                Icons.email, false, true),
+                            buildControlTF(context, 'Location', _location,
+                                Icons.location_city, false, true),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    flex: 40,
+                                    child: Column(
+                                      children: <Widget>[
+                                        buildControlTF(context, 'From Price',
+                                            _price, Icons.money, false, true)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 2),
+                                  Expanded(
+                                    flex: 20,
+                                    child: Column(
+                                      children: <Widget>[buildCurrencyBtn()],
+                                    ),
+                                  ),
+                                  SizedBox(width: 2),
+                                  Expanded(
+                                    flex: 40,
+                                    child: Column(
+                                      children: <Widget>[
+                                        buildControlTF(context, 'To Price',
+                                            _price, Icons.money, false, true)
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                            buildSearchBtn()
+                          ],
+                        )),
+                  )))),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
         currentIndex: _selectedIndex,
@@ -96,33 +98,66 @@ class _MyhomesearchState extends State<Myhomesearch> {
   }
 
   Widget buildCurrencyBtn() {
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: 10.0),
-    width: double.infinity,
-    child: ElevatedButton(     
-      style: ElevatedButton.styleFrom(
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
           primary: Colors.white60, // background
           onPrimary: Colors.white,
           padding: EdgeInsets.all(20),
           elevation: 2,
           shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(10.0),
           ),
-                   
+        ),
+        onPressed: () {
+          setState(() {
+            _currency = (_currency == '៛') ? '\$' : '៛';
+          });
+        },
+        child: Text(
+          _currency,
+          style: TextStyle(
+            color: Color(0xFF527DAA),
+            letterSpacing: 1.5,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
           ),
-      onPressed: () {
-        setState(() {
-          _currency = (_currency == '៛') ? '\$' : '៛';
-        });
-      },
-      child: Text(_currency,style: TextStyle(
-          color: Color(0xFF527DAA),
-          letterSpacing: 1.5,
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'OpenSans',
-        ),),
-    ),
-  );
-}
+        ),
+      ),
+    );
+  }
+
+  Widget buildSearchBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white60, // background
+          onPrimary: Colors.white,
+          padding: EdgeInsets.all(20),
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        },
+        child: Text(
+          'SEARCH DATA',
+          style: TextStyle(
+            color: Color(0xFF527DAA),
+            letterSpacing: 1.5,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+      ),
+    );
+  }
 }
