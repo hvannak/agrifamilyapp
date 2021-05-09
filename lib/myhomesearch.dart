@@ -1,5 +1,6 @@
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
 import 'package:flutter/material.dart';
 
 class Myhomesearch extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
   var _location = TextEditingController();
   var _price = TextEditingController();
   String _currency = "៛";
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -27,41 +28,69 @@ class _MyhomesearchState extends State<Myhomesearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Search Data')),
       body: Container(
-        child:SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Card(
-          elevation: 10,
-          child: Padding(
-            padding: EdgeInsets.all(5),
-            child: Form(
-              key: _formKeymodify,
-            child: Column(
-              children: [
-                buildControlTF(context, 'Title', _title,
-                                      Icons.title,false, true),
-                buildControlTF(context, 'Title', _description,
-                                      Icons.title,false, true),
-                buildControlTF(context, 'Phone', _phone,
-                                      Icons.phone,false, true),
-                buildControlTF(context, 'Email', _email,
-                                      Icons.email,false, true),
-                buildControlTF(context, 'Location', _location,
-                                      Icons.location_city,false, true),
-                buildControlTF(context, 'Price', _price,
-                                      Icons.money,false, true),
-                // buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
-              ],
-            )
-          ),
-          )
-        ))
-      ),
+          child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Card(
+                shadowColor: Colors.blueGrey,
+                  child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Form(
+                    key: _formKeymodify,
+                    child: Column(
+                      children: [
+                        buildControlTF(
+                            context, 'Title', _title, Icons.title, false, true),
+                        buildControlTF(context, 'Description', _description,
+                            Icons.title, false, true),
+                        buildControlTF(
+                            context, 'Phone', _phone, Icons.phone, false, true),
+                        buildControlTF(
+                            context, 'Email', _email, Icons.email, false, true),
+                        buildControlTF(context, 'Location', _location,
+                            Icons.location_city, false, true),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                flex: 40,
+                                child: Column(
+                                  children: <Widget>[
+                                    buildControlTF(context, 'From Price', _price,
+                                        Icons.money, false, true)
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 2),
+                              Expanded(
+                                flex: 20,
+                                child: Column(
+                                  children: <Widget>[
+                                    buildCurrencyBtn(context,_currency)
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 2),
+                              Expanded(
+                                flex: 40,
+                                child: Column(
+                                  children: <Widget>[
+                                    buildControlTF(context, 'To Price', _price,
+                                        Icons.money, false, true)
+                                  ],
+                                ),
+                              ),
+                            ]),
+                        buildSearchBtn(context)
+                      ],
+                    )),
+              )))),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,      
+        onTap: _onItemTapped,
       ),
     );
   }

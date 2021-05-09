@@ -33,7 +33,7 @@ Widget buildControlTF(
               iconData,
               color: Colors.white,
             ),
-            hintText: 'Enter your ' + label,
+            hintText: label,
             errorStyle: kErrorTextStyle,
             hintStyle: kHintTextStyle,
           ),

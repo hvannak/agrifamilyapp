@@ -1,50 +1,59 @@
- import 'package:agrifamilyapp/Widgets/controlswidget.dart';
+import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-var _title = TextEditingController();
-var _description = TextEditingController();
-var _phone = TextEditingController();
-var _email = TextEditingController();
-var _location = TextEditingController();
-var _fromprice = TextEditingController();
-var _toprice = TextEditingController();
+Widget buildSearchBtn(BuildContext context) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 10.0),
+    width: double.infinity,
+    child: ElevatedButton(     
+      style: ElevatedButton.styleFrom(
+          primary: Colors.white60, // background
+          onPrimary: Colors.white,
+          padding: EdgeInsets.all(20),
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          ),
+                   
+          ),
+      onPressed: () {},
+      child: Text('SEARCH DATA',style: TextStyle(
+          color: Color(0xFF527DAA),
+          letterSpacing: 1.5,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'OpenSans',
+        ),),
+    ),
+  );
+}
 
-Future<void> showMyDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              buildControlTF(context, 'Title', _title,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _description,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _email,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _phone,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _location,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _fromprice,
-                                      Icons.title,false, true),
-              buildControlTF(context, 'Title', _toprice,
-                                      Icons.title,false, true),                                                
-            ],
+Widget buildCurrencyBtn(BuildContext context,String currency) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 10.0),
+    width: double.infinity,
+    child: ElevatedButton(     
+      style: ElevatedButton.styleFrom(
+          primary: Colors.white60, // background
+          onPrimary: Colors.white,
+          padding: EdgeInsets.all(20),
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Search'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+                   
           ),
-        ],
-      );
-    },
+      onPressed: () {
+        currency = (currency == '៛') ? '\$' : '៛';
+      },
+      child: Text(currency,style: TextStyle(
+          color: Color(0xFF527DAA),
+          letterSpacing: 1.5,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'OpenSans',
+        ),),
+    ),
   );
 }
