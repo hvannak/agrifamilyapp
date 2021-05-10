@@ -2,10 +2,11 @@ import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/models/categorymodel.dart';
 import 'package:flutter/material.dart';
 
+String? category;
+
 Widget buildControlDropdownCategory(
       BuildContext context,
       String label,
-      String? dropValue,
       Future<List<Categorymodel>> funData,
       IconData iconData) {
     return FutureBuilder<List<Categorymodel>>(
@@ -32,10 +33,10 @@ Widget buildControlDropdownCategory(
                         .toList(),
                     onChanged: (value) {
                       print(value);
-                      dropValue = value.toString();
+                      category = value.toString();
                     },
                     hint: Text(label,style: kHintTextStyle),
-                    value: (dropValue == null) ? snapshot.data![0].id : dropValue,
+                    value: (category == null) ? snapshot.data![0].id : category,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.only(top: 5.0),

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ApiHelpers {
   static String _urlSetting = 'https://agrifamily.herokuapp.com/api';
+  // static String _urlSetting = 'http://192.168.100.62:3000/api';
 
 static Future<http.Response> fetchPost(
       String url, body) async {

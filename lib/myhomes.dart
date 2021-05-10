@@ -7,8 +7,10 @@ import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
+import 'package:agrifamilyapp/models/pagesearchobjmodel.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
+import 'package:agrifamilyapp/models/searchpostmodel.dart';
 import 'package:agrifamilyapp/modules/myhomefunc.dart';
 import 'package:agrifamilyapp/myhomesearch.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +33,10 @@ class _MyhomeState extends State<Myhome> {
   int _currentPage = 1;
   int _pageSize = 6;
   late Pageobjmodel _pageObjModel;
+  late Pagesearchobjmodel _pagesearchObjModel;
+  String _heroTag = "btnSearch";
+  int _heroTagIndex = 1;
+  late Searchpostmodel _isSearching;
 
   @override
   void initState() {
@@ -40,6 +46,7 @@ class _MyhomeState extends State<Myhome> {
     });
     _pageObjModel = new Pageobjmodel(null, null,"-1",
         new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
+    _isSearching = new Searchpostmodel(null, null, null, null, null, null, null, null, '៛', null);
     _future = fetchDisplayPosts(context, _pageObjModel.toJson());
     super.initState();
   }
@@ -53,9 +60,20 @@ class _MyhomeState extends State<Myhome> {
           new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
       var totalPage = (totalDoc / _pageSize).ceil();
       if (_currentPage <= totalPage) {
-        setState(() {
-          _future = fetchDisplayPosts(context, _pageObjModel.toJson());
-        });
+        if(_isSearching.category != null){
+            _pagesearchObjModel = new Pagesearchobjmodel(_isSearching, null,_isSearching.category,
+                  new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
+            setState(() {
+              _heroTagIndex += 1;
+              _heroTag = "btnSearching" + _heroTagIndex.toString();
+              _future = fetchSearchDisplayPosts(context,_pagesearchObjModel.toJson());
+            });
+        } else {
+            setState(() {
+              _future = fetchDisplayPosts(context, _pageObjModel.toJson());
+            });
+        }
+
       }
     }
     if (_controller.offset <= _controller.position.minScrollExtent &&
@@ -157,13 +175,22 @@ class _MyhomeState extends State<Myhome> {
     ),
     floatingActionButton: FloatingActionButton(
         key: UniqueKey(),
-        heroTag: 'btnSearch',
+        heroTag: _heroTag,
         onPressed: () async {
-          final isSearching = await Navigator.push(
+          _isSearching = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Myhomesearch()),
           );
-          print(isSearching);
+          if(_isSearching.category != null){
+            _currentPage = 1;
+            _pagesearchObjModel = new Pagesearchobjmodel(_isSearching, null,_isSearching.category,
+                  new Pageoptmodel(_currentPage, _pageSize, ['date'], [true]));
+            setState(() {
+              _heroTagIndex += 1;
+              _heroTag = "btnSearching" + _heroTagIndex.toString();
+              _future = fetchSearchDisplayPosts(context,_pagesearchObjModel.toJson());
+            });
+          }
         },                 
         child: Icon(Icons.search_rounded),
         backgroundColor: Colors.green,

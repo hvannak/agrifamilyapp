@@ -2,6 +2,7 @@ import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
 import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
+import 'package:agrifamilyapp/models/searchpostmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,8 @@ class _MyhomesearchState extends State<Myhomesearch> {
   var _phone = TextEditingController();
   var _email = TextEditingController();
   var _location = TextEditingController();
-  var _price = TextEditingController();
+  var _fromPrice = TextEditingController();
+  var _toPrice = TextEditingController();
   String _currency = "៛";
 
   void _onItemTapped(int index) {
@@ -42,7 +44,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                         key: _formKeymodify,
                         child: Column(
                           children: [
-                            buildControlDropdownCategory(context,'Category',null,fetchAllCategory(context),Icons.category),
+                            buildControlDropdownCategory(context,'Category',fetchAllCategory(context),Icons.category),
                             buildControlTF(context, 'Title', _title,
                                 Icons.title, false, true),
                             buildControlTF(context, 'Description', _description,
@@ -62,7 +64,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                                     child: Column(
                                       children: <Widget>[
                                         buildControlTF(context, 'From Price',
-                                            _price, Icons.money, false, true)
+                                            _fromPrice, Icons.money, false, true)
                                       ],
                                     ),
                                   ),
@@ -79,7 +81,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                                     child: Column(
                                       children: <Widget>[
                                         buildControlTF(context, 'To Price',
-                                            _price, Icons.money, false, true)
+                                            _toPrice, Icons.money, false, true)
                                       ],
                                     ),
                                   ),
@@ -145,7 +147,10 @@ class _MyhomesearchState extends State<Myhomesearch> {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).pop(true);
+          var fromP = (_fromPrice.text.length == 0) ? null : int.parse(_fromPrice.text);
+          var toP = (_toPrice.text.length == 0) ? null : int.parse(_toPrice.text);
+          var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
+          Navigator.of(context).pop(searching);
         },
         child: Text(
           'SEARCH DATA',
