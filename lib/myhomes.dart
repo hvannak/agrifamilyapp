@@ -161,7 +161,7 @@ class _MyhomeState extends State<Myhome> {
                                                   print('You tap');
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(builder: (context) => MyPostDetails()),
+                                                    MaterialPageRoute(builder: (context) => MyPostDetails(snapshot.data[index])),
                                                   );
                                                 },
                                                 child: CircleAvatar(
@@ -189,7 +189,7 @@ class _MyhomeState extends State<Myhome> {
                                     ),
                                     title: Text(snapshot.data[index].title),
                                     subtitle:
-                                        Text(snapshot.data[index].description),
+                                        Text(snapshot.data[index].category.title),
                                   ),
                                 ],
                               ),

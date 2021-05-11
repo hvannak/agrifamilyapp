@@ -86,3 +86,39 @@ Future<List<Postdisplaymodel>> fetchSearchDisplayPosts(BuildContext context,Map<
       throw (e);
     }
   }
+
+  Future<Postdisplaymodel> fetchDisplayDetailPostsById(BuildContext context,String postId) async {
+    try {
+      final response = await ApiHelpers.fetchData('/posts/getById/' + postId);
+      if (response.statusCode == 200) {
+        var postObj = jsonDecode(response.body);
+        Postdisplaymodel postdisplaymodel = Postdisplaymodel.fromJson(postObj);
+        return postdisplaymodel;      
+      } else {
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
+    }
+  }
+
+  Future<List<Postimagemodel>> fetchPostImages(BuildContext context,String postId) async {
+    try {
+      final response = await ApiHelpers.fetchData('/posts/getImageByPostId/' + postId);
+      if (response.statusCode == 200) {
+        var list = jsonDecode(response.body) as List;
+        var listPostImages = list.map((i) => Postimagemodel.fromJson(i)).toList();
+        return listPostImages;      
+      } else {
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
+    }
+  }
