@@ -9,7 +9,4 @@ String title = "Agrifamily Community";
 abstract class MyMainFunc {
   int selectedIndex = 0;
   List<Widget> widgetOptions = <Widget>[Myhome(), MyPosts(), MyAccount()];
-  void onItemTapped(int index) {
-      selectedIndex = index;
-  }
 }

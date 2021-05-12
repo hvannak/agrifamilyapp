@@ -20,6 +20,7 @@ class _MyAccountState extends State<MyAccount> {
   var _email = TextEditingController();
   var _password = TextEditingController();
   bool _isLogin = false;
+  String _language = "KH";
 
   @override
   void initState() {
@@ -29,8 +30,26 @@ class _MyAccountState extends State<MyAccount> {
 
   @override
   Widget build(BuildContext context) {
-    if(_isLogin){
-      return Container(
+    return Scaffold(
+      body: Container(
+        child: (_isLogin) ? authWidget() : unAuthWidget() ,
+      ),
+      floatingActionButton: Container(
+        alignment: Alignment.topRight,
+        padding: EdgeInsets.only(top: 30),
+        child: FloatingActionButton(
+          child: Text(_language),
+          onPressed: () {
+            setState(() {
+              _language = (_language == 'KH') ? 'EN' : 'KH';
+            });
+          },),
+      ),
+    );    
+  }
+
+  Widget authWidget(){
+    return Container(
         color: Colors.lightBlueAccent,
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
@@ -89,8 +108,10 @@ class _MyAccountState extends State<MyAccount> {
           )
         ),
       );
-    } else {
-      return Container(
+  }
+
+  Widget unAuthWidget(){
+    return Container(
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
@@ -122,7 +143,6 @@ class _MyAccountState extends State<MyAccount> {
         ),
       ),
     );
-    }    
   }
 
    _initUserData() async {
