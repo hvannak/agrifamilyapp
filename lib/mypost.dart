@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:agrifamilyapp/modules/mypostfunc.dart';
 import 'package:agrifamilyapp/takephoto.dart';
 import 'package:camera/camera.dart';
@@ -138,7 +140,6 @@ class MyEditPosts extends StatefulWidget {
 
 class _MyEditPostsState extends State<MyEditPosts> {
 
-  int _selectedIndex = 1;
   final _formKeymodify = GlobalKey<FormState>();
   var _title = TextEditingController();
   var _description = TextEditingController();
@@ -157,10 +158,10 @@ class _MyEditPostsState extends State<MyEditPosts> {
   String _imagebase64 = '';
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      resetPostFunc(context);
-    });
+    Navigator.of(context).pop();
+      Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MyHomePage(key: UniqueKey(), title: title, index: index)),
+      );
   }
 
   Future<void> _initCamera() async {
@@ -244,7 +245,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
           ),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,      
       ),

@@ -1,7 +1,9 @@
 import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
 import 'package:agrifamilyapp/modules/myhomefunc.dart';
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +15,13 @@ class MyPostDetails extends StatefulWidget {
 }
 
 class _MyPostDetailsState extends State<MyPostDetails> {
-  int _selectedIndex = 0;
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // resetPostFunc(context);
-    });
+      Navigator.of(context).pop();
+      Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MyHomePage(key: UniqueKey(), title: title, index: index)),
+    );
   }
+    
 
   @override
   void initState() {
@@ -164,7 +166,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
       )),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),

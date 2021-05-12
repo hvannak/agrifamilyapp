@@ -1,3 +1,4 @@
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 import 'Widgets/mainwidget.dart';
 import 'modules/mypostfunc.dart';
@@ -20,39 +21,45 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(key:UniqueKey(),title: 'Agrifamily Community'),
+      home: MyHomePage(key:UniqueKey(),title: title,index: 0),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({required Key key, required this.title}) : super(key: key);
+  MyHomePage({required Key key, required this.title,required this.index}) : super(key: key);
   final String title;
+  final int index;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
       resetPostFunc(context);
       resetHomeFunc(context);
     });
   }
 
   @override
+  void initState() {
+    _onItemTapped(widget.index);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: widgetOptions.elementAt(_selectedIndex),
+        child: widgetOptions.elementAt(selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,      
       ),
