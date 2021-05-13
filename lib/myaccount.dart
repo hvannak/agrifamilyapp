@@ -32,27 +32,17 @@ class _MyAccountState extends State<MyAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: (_isLogin) ? authWidget() : unAuthWidget(),
-      ),
-      floatingActionButton: Container(
-        alignment: Alignment.topRight,
-        padding: EdgeInsets.only(top: 30),
-        child: FloatingActionButton(
-          // child: Text(_language),
-          child: listLanguages(),
-          onPressed: () {
-            setState(() {
-              _language = (_language == 'KH') ? 'EN' : 'KH';
-            });
-          },
+        body: Container(
+          child: (_isLogin) ? authWidget() : unAuthWidget(),
         ),
-      ),
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: listLanguages());
   }
 
   Widget listLanguages() {
     return Container(
+      alignment: Alignment.bottomLeft,
+      padding: EdgeInsets.all(40),
       child: FutureBuilder(
         future: fetchAllLanguages(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -65,23 +55,29 @@ class _MyAccountState extends State<MyAccount> {
               height: 20,
             )));
           } else {
-            return Container(
-                child: ListView.builder(
+            return ListView.builder(
                     itemCount: snapshot.data.length,
-                    scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top:30),
-                            child: FloatingActionButton(
-                              heroTag: 'btn' + index.toString(),
+                      return Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            FloatingActionButton(
+                              key: UniqueKey(),
+                              heroTag: 'btnTag' + index.toString(),
+                              onPressed: () {
+                                print('your tapped');
+                              },
                               child: Text(snapshot.data[index].shortcode),
-                              onPressed: () {}),
-                          )
-                        ],
+                              backgroundColor: Colors.green,
+                            ),
+                            SizedBox(height: 5)
+                          ],
+                        ),
                       );
-                    }));
+                    });
           }
         },
       ),
