@@ -179,7 +179,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Post'),),
+      appBar: AppBar(title: buildText('NewItem'),),
       body: Container(
         child:SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -191,17 +191,17 @@ class _MyEditPostsState extends State<MyEditPosts> {
               key: _formKeymodify,
             child: Column(
               children: [
-                buildControlTF(context, 'Title', _title,
+                buildControl(context, 'Title', _title,
                                       Icons.title,false, true),
-                buildControlMultiLineTF(context, 'Description', _description,
+                buildControlMultiLine(context, 'Description', _description,
                                       Icons.text_fields),
-                buildControlTF(context, 'Phone', _phone,
+                buildControl(context, 'Phone', _phone,
                                       Icons.phone,false, true),
-                buildControlTF(context, 'Email', _email,
+                buildControl(context, 'Email', _email,
                                       Icons.email,false, true),
-                buildControlTF(context, 'Location', _location,
+                buildControl(context, 'Location', _location,
                                       Icons.location_city,false, true),
-                buildControlTF(context, 'Price', _price,
+                buildControl(context, 'Price', _price,
                                       Icons.money,false, true),
                 buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
                 (_imagePath=='') ? Text('Image') : Container(

@@ -52,7 +52,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onLocalLanguage() async {
     var languages = await fetchAllLanguages(context);
-    var localization = await fetchLocalLanguage(context,languages.where((x) => x.defaultlang == true).first.id);
+    var localization;
+    if(await getsharedPref('lang') != ""){      
+      localization = await fetchLocalLanguage(context, await getsharedPref('lang'));
+    } else {
+      setsharedPref('lang',languages.where((x) => x.defaultlang == true).first.id);
+      localization = await fetchLocalLanguage(context,languages.where((x) => x.defaultlang == true).first.id);
+    }
     setsharedPref('local',jsonEncode(localization));
   }
 

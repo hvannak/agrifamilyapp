@@ -10,8 +10,8 @@ Categorymodel _$CategorymodelFromJson(Map<String, dynamic> json) {
   return Categorymodel(
     json['_id'] as String,
     json['title'] as String,
-    json['icon'] as String,
-    json['lang'] as String,
+    json['icon'] as String?,
+    json['lang'] as String?,
   );
 }
 

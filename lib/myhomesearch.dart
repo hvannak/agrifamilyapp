@@ -32,7 +32,17 @@ class _MyhomesearchState extends State<Myhomesearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Search Data')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+           var searching = new Searchpostmodel(
+              null, null, null, null, null, null, null, null, '៛', null);
+            Navigator.of(context).pop(searching);
+          },
+        ),
+        title: buildText('Detail_search_data')
+      ),
       body: Container(
           child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
@@ -44,16 +54,16 @@ class _MyhomesearchState extends State<Myhomesearch> {
                         key: _formKeymodify,
                         child: Column(
                           children: [
-                            buildControlDropdownCategory(context,'Category',fetchAllCategory(context),Icons.category),
-                            buildControlTF(context, 'Title', _title,
+                            buildControlDropdownCategory(context,'Category',fetchCategoryLang(context),Icons.category),
+                            buildControl(context, 'Title', _title,
                                 Icons.title, false, true),
-                            buildControlTF(context, 'Description', _description,
+                            buildControl(context, 'Description', _description,
                                 Icons.description, false, true),
-                            buildControlTF(context, 'Phone', _phone,
+                            buildControl(context, 'Phone', _phone,
                                 Icons.phone, false, true),
-                            buildControlTF(context, 'Email', _email,
+                            buildControl(context, 'Email', _email,
                                 Icons.email, false, true),
-                            buildControlTF(context, 'Location', _location,
+                            buildControl(context, 'Location', _location,
                                 Icons.location_city, false, true),
                             Row(
                                 mainAxisAlignment:
@@ -63,7 +73,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                                     flex: 40,
                                     child: Column(
                                       children: <Widget>[
-                                        buildControlTF(context, 'From Price',
+                                        buildControl(context, 'Price',
                                             _fromPrice, Icons.money, false, true)
                                       ],
                                     ),
@@ -80,7 +90,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                                     flex: 40,
                                     child: Column(
                                       children: <Widget>[
-                                        buildControlTF(context, 'To Price',
+                                        buildControl(context, 'Price',
                                             _toPrice, Icons.money, false, true)
                                       ],
                                     ),
@@ -152,16 +162,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
           var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
           Navigator.of(context).pop(searching);
         },
-        child: Text(
-          'SEARCH DATA',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
+        child: buildText('Search_btn')
       ),
     );
   }

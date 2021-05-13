@@ -128,21 +128,21 @@ class _MyAccountState extends State<MyAccount> {
                                         key: _formKeymodify,
                                         child: Column(
                                           children: <Widget>[
-                                            buildControlTF(
+                                            buildControl(
                                                 context,
                                                 'Name',
                                                 _name,
                                                 Icons.verified_user,
                                                 false,
                                                 true),
-                                            buildControlTF(
+                                            buildControl(
                                                 context,
                                                 'Email',
                                                 _email,
                                                 Icons.person,
                                                 false,
                                                 true),
-                                            buildControlTF(
+                                            buildControl(
                                                 context,
                                                 'Password',
                                                 _password,
@@ -186,9 +186,9 @@ class _MyAccountState extends State<MyAccount> {
                       ),
                       radius: 50,
                     ),
-                    buildControlTF(
+                    buildControl(
                         context, 'Email', _email, Icons.person, false, true),
-                    buildControlTF(context, 'Password', _password,
+                    buildControl(context, 'Password', _password,
                         Icons.security, true, true),
                     buildLoginBtn(),
                     buildRegisterBtn()

@@ -16,6 +16,5 @@ setsharedPref(String key,String value) async {
 Future<String> getShowLang(String prop) async {
   var list = jsonDecode(await getsharedPref('local')) as List;
   var listLocal = list.map((i) => Localizationmodel.fromJson(i)).toList().where((x) => x.props == prop && x.type == 'const').toList();
-  print(listLocal[0].text);
   return (listLocal.length > 0) ? listLocal[0].text : "Not Set";
 }

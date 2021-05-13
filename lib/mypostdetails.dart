@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:agrifamilyapp/Helpers/constants.dart';
+import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/localizationmodel.dart';
@@ -35,7 +36,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Details')),
+      appBar: AppBar(title: buildText('Message_title_detail')),
       body: Container(
           child: FutureBuilder(
         future: fetchPostImages(context, widget._posts.id!),
@@ -82,7 +83,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                         color: Colors.purple.shade100,                     
                         child: Row(children: <Widget>[
                           Container(
-                            height: 35,
+                            height: 40,
                             child: Padding(
                               padding: EdgeInsets.all(5),
                               child: Center(
@@ -111,7 +112,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                         color: Colors.yellow.shade100,                     
                         child: Row(children: <Widget>[
                           Container(
-                            height: 35,
+                            height: 40,
                             child: Padding(
                               padding: EdgeInsets.all(5),
                               child: Center(
@@ -119,7 +120,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                                   children: <Widget>[
                                     Icon(Icons.email,color: Colors.green[600],),
                                     SizedBox(width: 20,),
-                                    Text('Contact',style: headertextStyle,)
+                                    buildText('Contact')
                                   ],
                                 ),
                               ),
@@ -141,7 +142,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                         color: Colors.cyan.shade100,                     
                         child: Row(children: <Widget>[
                           Container(
-                            height: 35,
+                            height: 40,
                             child: Padding(
                               padding: EdgeInsets.all(5),
                               child: Center(
@@ -149,7 +150,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                                   children: <Widget>[
                                     Icon(Icons.home,color: Colors.green[600],),
                                     SizedBox(width: 20,),
-                                    Text('Address',style: headertextStyle,)
+                                    buildText('Address')
                                   ],
                                 ),
                               ),
