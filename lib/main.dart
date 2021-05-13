@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
+import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
+import 'package:agrifamilyapp/modules/mylocalizationfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 import 'Widgets/mainwidget.dart';
@@ -45,9 +50,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _onLocalLanguage() async {
+    var languages = await fetchAllLanguages(context);
+    var localization = await fetchLocalLanguage(context,languages.where((x) => x.defaultlang == true).first.id);
+    setsharedPref('local',jsonEncode(localization));
+  }
+
   @override
   void initState() {
     _onItemTapped(widget.index);
+    _onLocalLanguage();
     super.initState();
   }
 

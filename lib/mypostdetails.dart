@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/main.dart';
+import 'package:agrifamilyapp/models/localizationmodel.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
+import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/myhomefunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,13 +19,13 @@ class MyPostDetails extends StatefulWidget {
 }
 
 class _MyPostDetailsState extends State<MyPostDetails> {
+
   void _onItemTapped(int index) {
       Navigator.of(context).pop();
       Navigator.push(context,
         MaterialPageRoute(builder: (context) => MyHomePage(key: UniqueKey(), title: title, index: index)),
     );
   }
-    
 
   @override
   void initState() {
