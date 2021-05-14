@@ -37,7 +37,7 @@ Widget buildControlDropdownCategory(
                       category = value.toString();
                     },
                     // hint: Text(label,style: kHintTextStyle),
-                    hint: buildText(label),
+                    hint: buildText(label,headertextStyle),
                     value: (category == null) ? snapshot.data![0].id : category,
                     decoration: InputDecoration(
                       border: InputBorder.none,

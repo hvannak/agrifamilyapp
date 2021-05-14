@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-FutureBuilder buildText(String proptext) {
+FutureBuilder buildText(String proptext,TextStyle textstyle) {
   return FutureBuilder(
       future: getShowLang(proptext),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null) {
           return CupertinoActivityIndicator();
         }
-        return Text(snapshot.data, style: headertextStyle);
+        return Text(snapshot.data, style: textstyle);
       });
 }
 

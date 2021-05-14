@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
@@ -179,7 +180,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: buildText('NewItem'),),
+      appBar: AppBar(title: buildText('NewItem',headertextStyle),),
       body: Container(
         child:SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),

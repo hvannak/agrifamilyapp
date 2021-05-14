@@ -1,3 +1,4 @@
+import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/models/usermodel.dart';
@@ -21,7 +22,6 @@ class _MyAccountState extends State<MyAccount> {
   var _email = TextEditingController();
   var _password = TextEditingController();
   bool _isLogin = false;
-  String _language = "KH";
 
   @override
   void initState() {
@@ -32,17 +32,13 @@ class _MyAccountState extends State<MyAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          child: (_isLogin) ? authWidget() : unAuthWidget(),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: listLanguages());
+        body: Container(child: (_isLogin) ? authWidget() : unAuthWidget()));
   }
 
   Widget listLanguages() {
     return Container(
-      alignment: Alignment.bottomLeft,
-      padding: EdgeInsets.all(40),
+      alignment: Alignment.center,
+      height: 100,
       child: FutureBuilder(
         future: fetchAllLanguages(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -56,28 +52,27 @@ class _MyAccountState extends State<MyAccount> {
             )));
           } else {
             return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            FloatingActionButton(
-                              key: UniqueKey(),
-                              heroTag: 'btnTag' + index.toString(),
-                              onPressed: () {
-                                print('your tapped');
-                              },
-                              child: Text(snapshot.data[index].shortcode),
-                              backgroundColor: Colors.green,
+                itemCount: snapshot.data.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: InkWell(
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green,
+                          radius: 25,
+                          child: ClipOval(
+                            child: Text(
+                              snapshot.data[index].shortcode,
+                              style: kTextStyle,
                             ),
-                            SizedBox(height: 5)
-                          ],
+                          ),
                         ),
-                      );
-                    });
+                        onTap: () {
+                          print('taped');
+                        },
+                      ));
+                });
           }
         },
       ),
@@ -149,14 +144,18 @@ class _MyAccountState extends State<MyAccount> {
                                                 Icons.security,
                                                 true,
                                                 true),
-                                            buildChangeBtn()
+                                            Center(
+                                                child: MyButtonCallback(
+                                                    myPress: _changeInfo,
+                                                    labelText: 'Save'))
                                           ],
                                         )),
                                   ))
                             ],
                           ))
                     ],
-                  )
+                  ),
+                  listLanguages(),
                 ],
               )
             ],
@@ -166,6 +165,9 @@ class _MyAccountState extends State<MyAccount> {
 
   Widget unAuthWidget() {
     return Container(
+      color: Colors.lightBlueAccent,
+      alignment: Alignment.topCenter,
+      padding: EdgeInsets.all(40),
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
@@ -188,10 +190,14 @@ class _MyAccountState extends State<MyAccount> {
                     ),
                     buildControl(
                         context, 'Email', _email, Icons.person, false, true),
-                    buildControl(context, 'Password', _password,
-                        Icons.security, true, true),
-                    buildLoginBtn(),
-                    buildRegisterBtn()
+                    buildControl(context, 'Password', _password, Icons.security,
+                        true, true),
+                    Center(
+                        child: MyButtonCallback(
+                            myPress: _logIn, labelText: 'Login')),
+                    Center(
+                        child: MyButtonCallback(
+                            myPress: _register, labelText: 'Register'))
                   ],
                 ))
           ],
@@ -199,6 +205,44 @@ class _MyAccountState extends State<MyAccount> {
       ),
     );
   }
+
+  void _logIn() {
+    if (_formKey.currentState!.validate()) {
+      logIn(context, Usermodel.login(_email.text, _password.text).toLoginJson())
+          .then((value) => {
+                setState(() {
+                  _isLogin = true;
+                  _userObject = value;
+                })
+              });
+    } else {
+      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void _changeInfo() {
+    if (_formKeymodify.currentState!.validate()) {
+      update(
+              context,
+              Usermodel(_userObject.id, _name.text, _password.text, false,
+                      _email.text, null)
+                  .toJson())
+          .then((value) => {
+                setState(() {
+                  _isLogin = true;
+                  _userObject = value;
+                })
+              });
+    } else {
+      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+ void _register(){
+   print('you tapped');
+ }
 
   _initUserData() async {
     var token = await getsharedPref('token');
@@ -211,125 +255,5 @@ class _MyAccountState extends State<MyAccount> {
         _email.text = _userObject.email;
       });
     }
-  }
-
-  Widget buildLoginBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 2.0,
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            logIn(context,
-                    Usermodel.login(_email.text, _password.text).toLoginJson())
-                .then((value) => {
-                      setState(() {
-                        _isLogin = true;
-                        _userObject = value;
-                      })
-                    });
-          } else {
-            final snackBar =
-                SnackBar(content: Text('Please verify your input.'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'LOGIN',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildRegisterBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 2.0,
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            logIn(context,
-                Usermodel.login(_email.text, _password.text).toLoginJson());
-          } else {
-            final snackBar =
-                SnackBar(content: Text('Please verify your input.'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'REGISTER',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildChangeBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 2.0,
-        onPressed: () {
-          if (_formKeymodify.currentState!.validate()) {
-            update(
-                    context,
-                    Usermodel(_userObject.id, _name.text, _password.text, false,
-                            _email.text, null)
-                        .toJson())
-                .then((value) => {
-                      setState(() {
-                        _isLogin = true;
-                        _userObject = value;
-                      })
-                    });
-          } else {
-            final snackBar =
-                SnackBar(content: Text('Please verify your input.'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Colors.white,
-        child: Text(
-          'CHANG',
-          style: TextStyle(
-            color: Color(0xFF527DAA),
-            letterSpacing: 1.5,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
-        ),
-      ),
-    );
   }
 }

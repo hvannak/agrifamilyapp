@@ -1,3 +1,4 @@
+import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
@@ -41,7 +42,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
             Navigator.of(context).pop(searching);
           },
         ),
-        title: buildText('Detail_search_data')
+        title: buildText('Detail_search_data',headertextStyle)
       ),
       body: Container(
           child: SingleChildScrollView(
@@ -162,7 +163,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
           var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
           Navigator.of(context).pop(searching);
         },
-        child: buildText('Search_btn')
+        child: buildText('Search_btn',headertextStyle)
       ),
     );
   }

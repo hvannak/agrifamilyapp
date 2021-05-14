@@ -36,7 +36,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: buildText('Message_title_detail')),
+      appBar: AppBar(title: buildText('Message_title_detail',headertextStyle)),
       body: Container(
           child: FutureBuilder(
         future: fetchPostImages(context, widget._posts.id!),
@@ -120,7 +120,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                                   children: <Widget>[
                                     Icon(Icons.email,color: Colors.green[600],),
                                     SizedBox(width: 20,),
-                                    buildText('Contact')
+                                    buildText('Contact',headertextStyle)
                                   ],
                                 ),
                               ),
@@ -150,7 +150,7 @@ class _MyPostDetailsState extends State<MyPostDetails> {
                                   children: <Widget>[
                                     Icon(Icons.home,color: Colors.green[600],),
                                     SizedBox(width: 20,),
-                                    buildText('Address')
+                                    buildText('Address',headertextStyle)
                                   ],
                                 ),
                               ),
