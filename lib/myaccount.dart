@@ -226,7 +226,7 @@ class _MyAccountState extends State<MyAccount> {
     );
   }
 
-  void _logIn() {
+  void _logIn() async {
     if (_formKey.currentState!.validate()) {
       logIn(context, Usermodel.login(_email.text, _password.text).toLoginJson())
           .then((value) => {
@@ -236,12 +236,13 @@ class _MyAccountState extends State<MyAccount> {
                 })
               });
     } else {
-      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      var message = await getShowLang('InputInformation');
+      final snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  void _changeInfo() {
+  void _changeInfo() async {
     if (_formKeymodify.currentState!.validate()) {
       update(
               context,
@@ -255,7 +256,8 @@ class _MyAccountState extends State<MyAccount> {
                 })
               });
     } else {
-      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      var message = await getShowLang('InputInformation');
+      final snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -355,7 +357,8 @@ class _MyRegisterState extends State<MyRegister> {
         Navigator.of(context).pop(userObj);
       }
     } else {
-      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      var message = await getShowLang('InputInformation');
+      final snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

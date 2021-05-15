@@ -73,11 +73,13 @@ Future<Usermodel> logIn(BuildContext context,Map<String, dynamic> instance) asyn
       var response = await ApiHelpers.fetchPost(
             '/user/register', instance);
       if (response.statusCode == 200) {
-        final snackBar = SnackBar(content: Text('Your register is successfully.'));
+        var message = await getShowLang(jsonDecode(response.body)['message']);
+        final snackBar = SnackBar(content: Text(message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return jsonDecode(response.body)['_id'];
       } else {
-        final snackBar = SnackBar(content: Text(response.body));
+        var message = await getShowLang(response.body);
+        final snackBar = SnackBar(content: Text(message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         throw (response.statusCode.toString());
       }

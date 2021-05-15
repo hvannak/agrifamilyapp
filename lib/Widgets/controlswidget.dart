@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-FutureBuilder buildText(String proptext,TextStyle textstyle) {
+FutureBuilder buildText(String proptext, TextStyle textstyle) {
   return FutureBuilder(
       future: getShowLang(proptext),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -36,29 +36,37 @@ FutureBuilder buildControl(
               alignment: Alignment.centerLeft,
               decoration: kBoxDecorationStyle,
               height: 60.0,
-              child: TextFormField(
-                controller: textEditingController,
-                validator: (val) =>
-                    val!.isEmpty ? snapshot.data + ' is required' : null,
-                style: kTextStyle,
-                obscureText: obscure,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(top: 14.0),
-                  prefixIcon: Icon(
-                    iconData,
-                    color: Colors.white,
-                  ),
-                  hintText: snapshot.data,
-                  errorStyle: kErrorTextStyle,
-                  hintStyle: kHintTextStyle,
-                ),
-                onChanged: (value) async {
-                  if (tap) {
-                    print('Your taped');
-                  }
-                },
-              ),
+              child: FutureBuilder(
+                  future: getShowLang('VRequire'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                    if (snapshot.data == null) {
+                      return CupertinoActivityIndicator();
+                    }
+                    return TextFormField(
+                      controller: textEditingController,
+                      validator: (val) => val!.isEmpty
+                          ? snapshot.data + ' ' + snapshot1.data
+                          : null,
+                      style: kTextStyle,
+                      obscureText: obscure,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(top: 14.0),
+                        prefixIcon: Icon(
+                          iconData,
+                          color: Colors.white,
+                        ),
+                        hintText: snapshot.data,
+                        errorStyle: kErrorTextStyle,
+                        hintStyle: kHintTextStyle,
+                      ),
+                      onChanged: (value) async {
+                        if (tap) {
+                          print('Your taped');
+                        }
+                      },
+                    );
+                  }),
             ),
           ],
         );
@@ -80,24 +88,29 @@ FutureBuilder buildControlMultiLine(BuildContext context, String label,
             Container(
               alignment: Alignment.centerLeft,
               decoration: kBoxDecorationStyle,
-              child: TextFormField(
-                  controller: textEditingController,
-                  validator: (val) =>
-                      val!.isEmpty ? snapshot.data + ' is required' : null,
-                  style: kTextStyle,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 14.0),
-                    prefixIcon: Icon(
-                      iconData,
-                      color: Colors.white,
-                    ),
-                    hintText: snapshot.data,
-                    errorStyle: kErrorTextStyle,
-                    hintStyle: kHintTextStyle,
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 4),
+              child: FutureBuilder(
+                  future: getShowLang('VRequire'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                    return TextFormField(
+                        controller: textEditingController,
+                        validator: (val) => val!.isEmpty
+                            ? snapshot.data + ' ' + snapshot1.data
+                            : null,
+                        style: kTextStyle,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(top: 14.0),
+                          prefixIcon: Icon(
+                            iconData,
+                            color: Colors.white,
+                          ),
+                          hintText: snapshot.data,
+                          errorStyle: kErrorTextStyle,
+                          hintStyle: kHintTextStyle,
+                        ),
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 4);
+                  }),
             ),
           ],
         );
