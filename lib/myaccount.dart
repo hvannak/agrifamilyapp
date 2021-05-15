@@ -44,7 +44,7 @@ class _MyAccountState extends State<MyAccount> {
       ],
       elevation: 8.0,
     );
-    if(selectedItem == 'logout'){
+    if (selectedItem == 'logout') {
       setState(() {
         _isLogin = false;
         removesharedPref('token');
@@ -154,7 +154,7 @@ class _MyAccountState extends State<MyAccount> {
                                                 context,
                                                 'Email',
                                                 _email,
-                                                Icons.person,
+                                                Icons.email,
                                                 false,
                                                 true),
                                             buildControl(
@@ -209,7 +209,7 @@ class _MyAccountState extends State<MyAccount> {
                       radius: 50,
                     ),
                     buildControl(
-                        context, 'Email', _email, Icons.person, false, true),
+                        context, 'Email', _email, Icons.email, false, true),
                     buildControl(context, 'Password', _password, Icons.security,
                         true, true),
                     Center(
@@ -260,8 +260,17 @@ class _MyAccountState extends State<MyAccount> {
     }
   }
 
-  void _register() {
-    print('you tapped');
+  void _register() async {
+   var userObj = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyRegister()),
+          );
+    if(userObj != null){
+      setState(() {
+        _isLogin = true;
+        _userObject = userObj;
+      });
+    }
   }
 
   _initUserData() async {
@@ -274,6 +283,80 @@ class _MyAccountState extends State<MyAccount> {
         _name.text = _userObject.name;
         _email.text = _userObject.email;
       });
+    }
+  }
+}
+
+class MyRegister extends StatefulWidget {
+  @override
+  _MyRegisterState createState() => _MyRegisterState();
+}
+
+class _MyRegisterState extends State<MyRegister> {
+  final _formKey = GlobalKey<FormState>();
+  var _name = TextEditingController();
+  var _email = TextEditingController();
+  var _password = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: buildText('Register', headertextStyle),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).pop(null);
+          },
+        )
+      ),
+      body: Container(
+        color: Colors.lightBlueAccent,
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.all(40),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 10.0,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      buildControl(
+                          context, 'Username', _name, Icons.verified_user, false, true),
+                      buildControl(
+                          context, 'Email', _email, Icons.email, false, true),
+                      buildControl(context, 'Password', _password,
+                          Icons.security, true, true),
+                      buildControl(context, 'ConfirmPassword', _password,
+                          Icons.security_outlined, true, true),
+                      Center(
+                          child: MyButtonCallback(
+                              myPress: _register, labelText: 'Register'))
+                    ],
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _register() async {
+    if (_formKey.currentState!.validate()) {
+      var userId = await register(context, Usermodel.register(_name.text,_email.text,_password.text,false).toRegisterJson());
+      if(userId.length > 0) {
+       var userObj = logIn(context, Usermodel.login(_email.text, _password.text).toLoginJson());
+        Navigator.of(context).pop(userObj);
+      }
+    } else {
+      final snackBar = SnackBar(content: Text('Please verify your input.'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

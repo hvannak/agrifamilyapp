@@ -31,10 +31,6 @@ FutureBuilder buildControl(
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              label,
-              style: kLabelStyle,
-            ),
             SizedBox(height: 5.0),
             Container(
               alignment: Alignment.centerLeft,
