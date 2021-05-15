@@ -13,6 +13,11 @@ setsharedPref(String key,String value) async {
   await prefs.setString(key, value);
 }
 
+removesharedPref(String key) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(key);
+}
+
 Future<String> getShowLang(String prop) async {
   var list = jsonDecode(await getsharedPref('local')) as List;
   var listLocal = list.map((i) => Localizationmodel.fromJson(i)).toList().where((x) => x.props == prop && x.type == 'const').toList();

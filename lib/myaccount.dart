@@ -35,6 +35,23 @@ class _MyAccountState extends State<MyAccount> {
         body: Container(child: (_isLogin) ? authWidget() : unAuthWidget()));
   }
 
+  void _showPopupMenu() async {
+    var selectedItem = await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(50, 130, 100, 100),
+      items: [
+        PopupMenuItem<String>(child: const Text('Logout'), value: 'logout')
+      ],
+      elevation: 8.0,
+    );
+    if(selectedItem == 'logout'){
+      setState(() {
+        _isLogin = false;
+        removesharedPref('token');
+      });
+    }
+  }
+
   Widget listLanguages() {
     return Container(
       alignment: Alignment.center,
@@ -110,7 +127,10 @@ class _MyAccountState extends State<MyAccount> {
                                 radius: 90,
                               ),
                               ListTile(
-                                leading: Icon(Icons.arrow_drop_down_circle),
+                                leading: InkWell(
+                                  child: Icon(Icons.arrow_drop_down_circle),
+                                  onTap: () => _showPopupMenu(),
+                                ),
                                 title: Text(_userObject.email,
                                     style: headertextStyle),
                                 subtitle: Text(_userObject.name),
@@ -125,7 +145,7 @@ class _MyAccountState extends State<MyAccount> {
                                           children: <Widget>[
                                             buildControl(
                                                 context,
-                                                'Name',
+                                                'Username',
                                                 _name,
                                                 Icons.verified_user,
                                                 false,
@@ -240,9 +260,9 @@ class _MyAccountState extends State<MyAccount> {
     }
   }
 
- void _register(){
-   print('you tapped');
- }
+  void _register() {
+    print('you tapped');
+  }
 
   _initUserData() async {
     var token = await getsharedPref('token');
