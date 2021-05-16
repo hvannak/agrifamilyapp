@@ -73,6 +73,123 @@ FutureBuilder buildControl(
       });
 }
 
+FutureBuilder buildControlPassword(
+    BuildContext context,
+    String label,
+    TextEditingController textEditingController,
+    IconData iconData,
+    bool obscure,
+    bool tap) {
+  return FutureBuilder(
+      future: getShowLang(label),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.data == null) {
+          return CupertinoActivityIndicator();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 5.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: kBoxDecorationStyle,
+              height: 60.0,
+              child: FutureBuilder(
+                  future: getShowLang('VRequire'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                    if (snapshot.data == null) {
+                      return CupertinoActivityIndicator();
+                    }
+                    return TextFormField(
+                      controller: textEditingController,
+                      validator: (val) => val!.isEmpty || val.length < 6
+                          ? '6 ' + snapshot.data + ' ' + snapshot1.data
+                          : null,
+                      style: kTextStyle,
+                      obscureText: obscure,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(top: 14.0),
+                        prefixIcon: Icon(
+                          iconData,
+                          color: Colors.white,
+                        ),
+                        hintText: snapshot.data,
+                        errorStyle: kErrorTextStyle,
+                        hintStyle: kHintTextStyle,
+                      ),
+                      onChanged: (value) async {
+                        if (tap) {
+                          print('Your taped');
+                        }
+                      },
+                    );
+                  }),
+            ),
+          ],
+        );
+      });
+}
+
+FutureBuilder buildControlConfirmPassword(
+    BuildContext context,
+    String label,
+    TextEditingController textEditingController,
+    TextEditingController textEditingControllerComp,
+    IconData iconData,
+    bool obscure,
+    bool tap) {
+  return FutureBuilder(
+      future: getShowLang(label),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.data == null) {
+          return CupertinoActivityIndicator();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 5.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: kBoxDecorationStyle,
+              height: 60.0,
+              child: FutureBuilder(
+                  future: getShowLang('RConfirmPassword'),
+                  builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                    if (snapshot.data == null) {
+                      return CupertinoActivityIndicator();
+                    }
+                    return TextFormField(
+                      controller: textEditingController,
+                      validator: (val) => val != textEditingControllerComp.text
+                          ? snapshot.data + ' ' + snapshot1.data
+                          : null,
+                      style: kTextStyle,
+                      obscureText: obscure,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(top: 14.0),
+                        prefixIcon: Icon(
+                          iconData,
+                          color: Colors.white,
+                        ),
+                        hintText: snapshot.data,
+                        errorStyle: kErrorTextStyle,
+                        hintStyle: kHintTextStyle,
+                      ),
+                      onChanged: (value) async {
+                        if (tap) {
+                          print('Your taped');
+                        }
+                      },
+                    );
+                  }),
+            ),
+          ],
+        );
+      });
+}
+
 FutureBuilder buildControlMultiLine(BuildContext context, String label,
     TextEditingController textEditingController, IconData iconData) {
   return FutureBuilder(

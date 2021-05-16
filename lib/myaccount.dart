@@ -299,6 +299,7 @@ class _MyRegisterState extends State<MyRegister> {
   var _name = TextEditingController();
   var _email = TextEditingController();
   var _password = TextEditingController();
+  var _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -333,9 +334,9 @@ class _MyRegisterState extends State<MyRegister> {
                           context, 'Username', _name, Icons.verified_user, false, true),
                       buildControl(
                           context, 'Email', _email, Icons.email, false, true),
-                      buildControl(context, 'Password', _password,
+                      buildControlPassword(context, 'Password', _password,
                           Icons.security, true, true),
-                      buildControl(context, 'ConfirmPassword', _password,
+                      buildControlConfirmPassword(context, 'ConfirmPassword',_confirmPassword,_password,
                           Icons.security_outlined, true, true),
                       Center(
                           child: MyButtonCallback(
