@@ -53,7 +53,8 @@ Future<Usermodel> logIn(BuildContext context,Map<String, dynamic> instance) asyn
       var response = await ApiHelpers.fetchPutWithAuth(
             '/user/put/${instance['_id']}', instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
-        final snackBar = SnackBar(content: Text('Your change is successfully.'));
+        var message = await getShowLang('CSuccessMessage');
+        final snackBar = SnackBar(content: Text(message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return Usermodel.fromJson(jsonDecode(response.body)['obj']);
       } else {

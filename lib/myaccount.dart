@@ -244,9 +244,10 @@ class _MyAccountState extends State<MyAccount> {
 
   void _changeInfo() async {
     if (_formKeymodify.currentState!.validate()) {
+      print(_userObject.backctl);
       update(
               context,
-              Usermodel(_userObject.id, _name.text, _password.text, false,
+              Usermodel(_userObject.id, _name.text, _password.text, _userObject.backctl,
                       _email.text, null)
                   .toJson())
           .then((value) => {

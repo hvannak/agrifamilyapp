@@ -23,6 +23,8 @@ Future<List<Postmodel>> getByPage(BuildContext context,Map<String, dynamic> inst
         moreLoad = false;
         return listPost;
       } else {
+        final snackBar = SnackBar(content: Text(response.body));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         print(response.statusCode.toString());
         throw (response.statusCode.toString());
       }
