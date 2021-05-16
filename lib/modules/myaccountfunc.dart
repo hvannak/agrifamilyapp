@@ -49,7 +49,6 @@ Future<Usermodel> logIn(BuildContext context,Map<String, dynamic> instance) asyn
 
   Future<Usermodel> update(BuildContext context,Map<String, dynamic> instance) async {
     try {
-      print(instance);
       var response = await ApiHelpers.fetchPutWithAuth(
             '/user/put/${instance['_id']}', instance,await getsharedPref('token'));
       if (response.statusCode == 200) {
