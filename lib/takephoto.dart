@@ -66,17 +66,15 @@ class TakePictureScreenState extends State<TakePhoto> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
-      child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        leading: new IconButton(
-            icon: new Icon(Icons.clear),
-            onPressed: () {
-              Navigator.pop(context, _nullpath);
-            },
-          ),
-        title: Text('Take a picture'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).pop(null);
+          },
+        ),
+        title: Text('Camera'),
       ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
@@ -107,7 +105,6 @@ class TakePictureScreenState extends State<TakePhoto> {
           }
         },
       ),
-      )
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/imagefiles.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
@@ -148,15 +149,12 @@ class _MyEditPostsState extends State<MyEditPosts> {
   var _email = TextEditingController();
   var _location = TextEditingController();
   var _price = TextEditingController();
+  List<String> _listImage = [];
   String _currency = "៛";
   List<String> listCurrency = ['៛','\$'];
   Future<List<String>> getCurrencyList () async{
     return listCurrency;
   }
-
-  var _firstCamera;
-  String _imagePath = '';
-  String _imagebase64 = '';
 
   void _onItemTapped(int index) {
     Navigator.of(context).pop();
@@ -165,15 +163,8 @@ class _MyEditPostsState extends State<MyEditPosts> {
       );
   }
 
-  Future<void> _initCamera() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final cameras = await availableCameras();
-    _firstCamera = cameras.first;
-  }
-
   @override
   void initState() {
-    _initCamera();
     super.initState();
   }
 
@@ -205,12 +196,6 @@ class _MyEditPostsState extends State<MyEditPosts> {
                 buildControl(context, 'Price', _price,
                                       Icons.money,false, true),
                 buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
-                (_imagePath=='') ? Text('Image') : Container(
-                  height: 50,
-                  width: 50,
-                  child: Image.file(File(_imagePath),
-                  fit: BoxFit.cover,
-                ))
               ],
             )
           ),
@@ -227,8 +212,14 @@ class _MyEditPostsState extends State<MyEditPosts> {
                 FloatingActionButton(
                   key: UniqueKey(),
                   heroTag: 'btnCamera',
-                  onPressed: () {
-                    _navigateTakePictureScreen(context);
+                  onPressed: () async {
+                    var result = await  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ImageFiles()),
+                    );
+                    if(result != null){
+                      print(result.length);
+                    }
                   },                 
                   child: Icon(Icons.camera_alt),
                   backgroundColor: Colors.green,
@@ -251,21 +242,5 @@ class _MyEditPostsState extends State<MyEditPosts> {
         onTap: _onItemTapped,      
       ),
     );
-  }
-
-  _navigateTakePictureScreen(BuildContext context) async {
-    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TakePhoto(key: UniqueKey(),camera: _firstCamera),fullscreenDialog: true),
-                    );
-    print(result);
-    imageCache!.clear();
-    setState(() {
-      _imagePath = result;
-      File imagefile = new File(_imagePath);
-      List<int> imageBytes = imagefile.readAsBytesSync();
-      _imagebase64 = "data:image/png;base64," + base64Encode(imageBytes);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Image is captured")));
   }
 }
