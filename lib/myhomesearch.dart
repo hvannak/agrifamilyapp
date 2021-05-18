@@ -55,7 +55,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                         key: _formKeymodify,
                         child: Column(
                           children: [
-                            buildControlDropdownCategory(context,'Category',fetchCategoryLang(context),Icons.category),
+                            buildControlDropdownCategory(context,'Category',fetchCategoryLang(context,true),Icons.category),
                             buildControl(context, 'Title', _title,
                                 Icons.title, false, true),
                             buildControl(context, 'Description', _description,

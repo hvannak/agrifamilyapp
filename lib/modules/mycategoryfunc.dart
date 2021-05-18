@@ -24,14 +24,16 @@ Future<List<Categorymodel>> fetchAllCategory(BuildContext context) async{
     }
   }
 
-Future<List<Categorymodel>> fetchCategoryLang(BuildContext context) async{
+Future<List<Categorymodel>> fetchCategoryLang(BuildContext context,bool all) async{
     try{
       final response = await ApiHelpers.fetchData('/category/getByLangId/' + await getsharedPref('lang'));
       if (response.statusCode == 200) {
          var list = jsonDecode(response.body) as List;
          var listCategory  = list.map((i) => Categorymodel.fromJson(i)).toList();
          var allProp = await getShowLang('All');
-         listCategory.insert(0, Categorymodel('-1', allProp, null, null));
+         if(all){
+          listCategory.insert(0, Categorymodel('-1', allProp, null, null));
+         }
         return listCategory;
       } else {
         print(response.statusCode.toString());

@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agrifamilyapp/Helpers/constants.dart';
+import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
 import 'package:agrifamilyapp/imagefiles.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
+import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:agrifamilyapp/modules/mypostfunc.dart';
 import 'package:agrifamilyapp/takephoto.dart';
@@ -124,7 +127,7 @@ class _MyPostsState extends State<MyPosts> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyEditPosts()),
+            MaterialPageRoute(builder: (context) => MyEditPosts(null)),
           );
         },
         child: const Icon(Icons.navigation),
@@ -136,6 +139,8 @@ class _MyPostsState extends State<MyPosts> {
 
 //My Edit Post
 class MyEditPosts extends StatefulWidget {
+  final Postmodel? postmodel;
+  MyEditPosts(this.postmodel);
   @override
   _MyEditPostsState createState() => _MyEditPostsState();
 }
@@ -143,6 +148,7 @@ class MyEditPosts extends StatefulWidget {
 class _MyEditPostsState extends State<MyEditPosts> {
 
   final _formKeymodify = GlobalKey<FormState>();
+  String? _id;
   var _title = TextEditingController();
   var _description = TextEditingController();
   var _phone = TextEditingController();
@@ -165,6 +171,17 @@ class _MyEditPostsState extends State<MyEditPosts> {
 
   @override
   void initState() {
+    if(widget.postmodel != null){
+      _id = widget.postmodel!.id;
+      category = widget.postmodel!.category;
+      _title.text = widget.postmodel!.title;
+      _description.text = widget.postmodel!.description;
+      _phone.text = widget.postmodel!.phone!;
+      _email.text = widget.postmodel!.email!;
+      _location.text = widget.postmodel!.location!;
+      _price.text = widget.postmodel!.price.toString();
+      _currency = widget.postmodel!.currency;
+    }
     super.initState();
   }
 
@@ -183,6 +200,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
               key: _formKeymodify,
             child: Column(
               children: [
+                buildControlDropdownCategory(context,'Category',fetchCategoryLang(context,false),Icons.category),
                 buildControl(context, 'Title', _title,
                                       Icons.title,false, true),
                 buildControlMultiLine(context, 'Description', _description,
@@ -196,6 +214,9 @@ class _MyEditPostsState extends State<MyEditPosts> {
                 buildControl(context, 'Price', _price,
                                       Icons.money,false, true),
                 buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
+                Center(
+                  child: MyButtonCallback(
+                      myPress: _saveData, labelText: 'Save'))
               ],
             )
           ),
@@ -219,19 +240,12 @@ class _MyEditPostsState extends State<MyEditPosts> {
                     );
                     if(result != null){
                       print(result.length);
+                      _listImage = result;
                     }
                   },                 
                   child: Icon(Icons.camera_alt),
                   backgroundColor: Colors.green,
                 ),
-                SizedBox(height: 20),
-                FloatingActionButton(
-                  key: UniqueKey(),
-                  heroTag: 'btnSave',
-                  onPressed: () {},
-                  child: Icon(Icons.save),
-                  backgroundColor: Colors.green,
-                )
               ],
             ),
           ),
@@ -242,5 +256,11 @@ class _MyEditPostsState extends State<MyEditPosts> {
         onTap: _onItemTapped,      
       ),
     );
+  }
+
+  void _saveData(){
+    Postmodel postmodel = Postmodel(_id, category, null, _title.text, _description.text, _phone.text, 
+    _email.text, _location.text, int.parse(_price.text), _currency, _listImage);
+    savePostData(context, postmodel.toJson());
   }
 }

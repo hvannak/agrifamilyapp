@@ -9,8 +9,8 @@ part of 'postmodel.dart';
 Postmodel _$PostmodelFromJson(Map<String, dynamic> json) {
   return Postmodel(
     json['_id'] as String?,
-    json['category'] as String,
-    json['user'] as String,
+    json['category'] as String?,
+    json['user'] as String?,
     json['title'] as String,
     json['description'] as String,
     json['phone'] as String?,
@@ -18,8 +18,7 @@ Postmodel _$PostmodelFromJson(Map<String, dynamic> json) {
     json['location'] as String?,
     json['price'] as int,
     json['currency'] as String,
-    (json['firstimage'] as List<dynamic>?)?.map((e) => e as int).toList(),
-    json['date'] as String,
+    (json['image'] as List<String>?)?.map((e) => e).toList(),
   );
 }
 
@@ -34,6 +33,5 @@ Map<String, dynamic> _$PostmodelToJson(Postmodel instance) => <String, dynamic>{
       'location': instance.location,
       'price': instance.price,
       'currency': instance.currency,
-      'firstimage': instance.firstimage,
-      'date': instance.date,
+      'image': instance.image
     };

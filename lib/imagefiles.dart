@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
+import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/takephoto.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +39,7 @@ class _ImageFilesState extends State<ImageFiles> {
             Navigator.of(context).pop(null);
           },
         ),
-        title: Text('Image Files'),
+        title: buildText('Fileinput', headertextStyle),
       ),
         body: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -85,7 +87,7 @@ class _ImageFilesState extends State<ImageFiles> {
                 ),
                 Center(
                   child: MyButtonCallback(
-                      myPress: _keepImageFiles, labelText: 'File'))
+                      myPress: _keepImageFiles, labelText: 'Fileinput'))
               ],
             ),
           ),

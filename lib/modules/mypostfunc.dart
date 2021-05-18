@@ -45,6 +45,7 @@ resetPostFunc(BuildContext context) {
 }
 
 Future<Postmodel> savePostData(BuildContext context,Map<String, dynamic> instance) async {
+    print(instance);
     try {
       var response;
       if (instance['_id'] != null) {
