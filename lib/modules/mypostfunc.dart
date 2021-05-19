@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agrifamilyapp/Helpers/apiHelpers.dart';
+import 'package:agrifamilyapp/models/postimagemodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -75,6 +76,34 @@ Future<Postmodel> savePostData(BuildContext context,Map<String, dynamic> instanc
     } on Exception catch (e) {
       throw (e);
     }
+  }
+
+  Future<List<Postimagemodel>> fetchPostImages(BuildContext context,String postId) async {
+    try {
+      final response = await ApiHelpers.fetchData('/posts/getImageByPostId/' + postId);
+      if (response.statusCode == 200) {
+        var list = jsonDecode(response.body) as List;
+        var listPostImages = list.map((i) => Postimagemodel.fromJson(i)).toList();
+        return listPostImages;      
+      } else {
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
+    }
+  }
+
+  reInstantiatePostImageCodec(List<int> buffer){
+    String strValue = new String.fromCharCodes(buffer);
+    if(strValue.startsWith("data:image/png;base64,")){
+      strValue = strValue.split(",")[1];
+      return base64Decode(strValue);
+    } else {
+      return buffer;
+    }            
   }
 
 //   Future<void> deletLeaveData(int leaveId, bool isapprove) async {

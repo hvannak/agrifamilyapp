@@ -18,7 +18,10 @@ Postmodel _$PostmodelFromJson(Map<String, dynamic> json) {
     json['location'] as String?,
     json['price'] as int,
     json['currency'] as String,
-    (json['image'] as List<String>?)?.map((e) => e).toList(),
+    (json['image'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    (json['removeimage'] as List<dynamic>?)
+        ?.map((e) => Postimagemodel.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -33,5 +36,6 @@ Map<String, dynamic> _$PostmodelToJson(Postmodel instance) => <String, dynamic>{
       'location': instance.location,
       'price': instance.price,
       'currency': instance.currency,
-      'image': instance.image
+      'image': instance.image,
+      'removeimage': instance.removeimage?.map((e) => e.toJson()).toList(),
     };

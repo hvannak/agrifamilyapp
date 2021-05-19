@@ -5,13 +5,19 @@ import 'dart:typed_data';
 import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
+import 'package:agrifamilyapp/models/postimagemodel.dart';
+import 'package:agrifamilyapp/modules/mypostfunc.dart';
 import 'package:agrifamilyapp/takephoto.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'models/imagedatamodel.dart';
+
 class ImageFiles extends StatefulWidget {
+  final List<Postimagemodel> postimageList;
+  ImageFiles(this.postimageList);
   @override
   _ImageFilesState createState() => _ImageFilesState();
 }
@@ -20,7 +26,7 @@ class _ImageFilesState extends State<ImageFiles> {
   // var _firstCamera;
   // String _imagePath = '';
   List<String> _listBase64 = [];
-  List<List<int>> _list = [];
+  List<Postimagemodel> _listRemove = [];
   final picker = ImagePicker();
 
   @override
@@ -52,14 +58,32 @@ class _ImageFilesState extends State<ImageFiles> {
                 Container(
                   height: 400,
                   child: GridView.builder(
-                    itemCount: _list.length,
+                    itemCount: widget.postimageList.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2), 
-                    itemBuilder: (BuildContext context,int index){
-                      return Card(                
-                        child: Image.memory(Uint8List.fromList(_list[index]),fit: BoxFit.cover,)
+                    itemBuilder: (BuildContext context,int index){                    
+                      return Stack(
+                        children: [
+                          Card(                
+                            child: Image.memory(Uint8List.fromList(reInstantiatePostImageCodec(widget.postimageList[index].image.data)),fit: BoxFit.cover,)
+                          ),
+                          InkWell(
+                            child: Container(
+                            alignment: Alignment.topRight,
+                            child: CircleAvatar(
+                            child: Icon(Icons.delete_forever),
+                          ),
+                          ),
+                          onTap: (){
+                            _listRemove.add(Postimagemodel(widget.postimageList[index].id, widget.postimageList[index].image, widget.postimageList[index].post));
+                            setState(() {
+                              widget.postimageList.removeAt(index);
+                            });
+                          },
+                          )
+                        ],
                       );
                     }
-                  ),                 
+                  ),                   
                 ),
                 InkWell(
                   child: CircleAvatar(
@@ -95,7 +119,7 @@ class _ImageFilesState extends State<ImageFiles> {
   }
 
   void _keepImageFiles(){
-    Navigator.of(context).pop(_listBase64);
+    Navigator.of(context).pop([_listBase64,_listRemove]);
   }
 
   Future getImageFromCamera() async {
@@ -105,8 +129,9 @@ class _ImageFilesState extends State<ImageFiles> {
       if (pickedFile != null) {
         File imagefile = new File(pickedFile.path);
         List<int> imageBytes = imagefile.readAsBytesSync();
-        _list.add(imageBytes);
-        _listBase64.add("data:image/png;base64," + base64Encode(imageBytes));
+        var fileBuffer = "data:image/png;base64," + base64Encode(imageBytes);
+        _listBase64.add(fileBuffer);
+        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), widget.postimageList[0].post));
       } else {
         print('No image selected.');
       }
@@ -119,8 +144,9 @@ class _ImageFilesState extends State<ImageFiles> {
       if (pickedFile != null) {
         File imagefile = new File(pickedFile.path);
         List<int> imageBytes = imagefile.readAsBytesSync();
-        _list.add(imageBytes);
-        _listBase64.add("data:image/png;base64," + base64Encode(imageBytes));
+        var fileBuffer = "data:image/png;base64," + base64Encode(imageBytes);
+        _listBase64.add(fileBuffer);
+        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), widget.postimageList[0].post));
       } else {
         print('No image selected.');
       }

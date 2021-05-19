@@ -9,6 +9,7 @@ import 'package:agrifamilyapp/imagefiles.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/pageobjmodel.dart';
 import 'package:agrifamilyapp/models/pageoptmodel.dart';
+import 'package:agrifamilyapp/models/postimagemodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
@@ -111,12 +112,14 @@ class _MyPostsState extends State<MyPosts> {
                                       title: Text(snapshot.data[index].title),
                                       subtitle:
                                           Text(snapshot.data[index].location),
-                                      onTap: (){
-                                        Postmodel? modelObj = snapshot.data[index];                                     
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!)),
-                                        );
+                                      onTap: () async {
+                                        Postmodel? modelObj = snapshot.data[index];
+                                        List<Postimagemodel> imgList = await fetchPostImages(context,snapshot.data[index].id);                                    
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!,imgList)),
+                                        // );
+                                        Navigator.of(context).restorablePush(_dialogBuilder); 
                                       },
                                     ),
                                   ],
@@ -134,7 +137,7 @@ class _MyPostsState extends State<MyPosts> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyEditPosts(null)),
+            MaterialPageRoute(builder: (context) => MyEditPosts(null,[])),
           );
         },
         child: const Icon(Icons.navigation),
@@ -142,12 +145,20 @@ class _MyPostsState extends State<MyPosts> {
       ),
     );
   }
+
+  static Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
+  return DialogRoute<void>(
+    context: context,
+    builder: (BuildContext context) => const AlertDialog(title: Text('Material Alert!')),
+  );
+}
 }
 
 //My Edit Post
 class MyEditPosts extends StatefulWidget {
   final Postmodel? postmodel;
-  MyEditPosts(this.postmodel);
+  final List<Postimagemodel> postimageList;
+  MyEditPosts(this.postmodel,this.postimageList);
   @override
   _MyEditPostsState createState() => _MyEditPostsState();
 }
@@ -162,6 +173,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   var _location = TextEditingController();
   var _price = TextEditingController();
   List<String> _listImage = [];
+  List<Postimagemodel> _listRemoveImage = [];  
   bool _waiting = false;
   String _currency = "៛";
   List<String> listCurrency = ['៛', '\$'];
@@ -192,7 +204,6 @@ class _MyEditPostsState extends State<MyEditPosts> {
       _location.text = widget.postmodel!.location!;
       _price.text = widget.postmodel!.price.toString();
       _currency = widget.postmodel!.currency;
-      // _listImage = widget.postmodel!.image!;
     }
     super.initState();
   }
@@ -271,11 +282,11 @@ class _MyEditPostsState extends State<MyEditPosts> {
               onPressed: () async {
                 var result = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ImageFiles()),
+                  MaterialPageRoute(builder: (context) => ImageFiles(widget.postimageList)),
                 );
                 if (result != null) {
-                  print(result.length);
-                  _listImage = result;
+                  _listImage = result[0];
+                  _listRemoveImage = result[1];
                 }
               },
               child: Icon(Icons.camera_alt),
@@ -309,7 +320,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
           _location.text,
           int.parse(_price.text),
           _currency,
-          _listImage);
+          _listImage,_listRemoveImage);
       await savePostData(context, postmodel.toJson());
       setState(() {
         _waiting = false;
