@@ -113,10 +113,10 @@ class _MyPostsState extends State<MyPosts> {
                                           Text(snapshot.data[index].location),
                                       onTap: (){
                                         Postmodel? modelObj = snapshot.data[index];                                     
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!)),
-                                        // );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!)),
+                                        );
                                       },
                                     ),
                                   ],
@@ -181,16 +181,18 @@ class _MyEditPostsState extends State<MyEditPosts> {
 
   @override
   void initState() {
+    print(widget.postmodel!.phone);
     if (widget.postmodel != null) {
       _id = widget.postmodel!.id;
       category = widget.postmodel!.category;
       _title.text = widget.postmodel!.title;
       _description.text = widget.postmodel!.description;
       _phone.text = widget.postmodel!.phone!;
-      _email.text = widget.postmodel!.email!;
+      _email.text = widget.postmodel!.email != null ? widget.postmodel!.email! : '';
       _location.text = widget.postmodel!.location!;
       _price.text = widget.postmodel!.price.toString();
       _currency = widget.postmodel!.currency;
+      // _listImage = widget.postmodel!.image!;
     }
     super.initState();
   }
