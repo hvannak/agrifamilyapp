@@ -115,11 +115,10 @@ class _MyPostsState extends State<MyPosts> {
                                       onTap: () async {
                                         Postmodel? modelObj = snapshot.data[index];
                                         List<Postimagemodel> imgList = await fetchPostImages(context,snapshot.data[index].id);                                    
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!,imgList)),
-                                        // );
-                                        Navigator.of(context).restorablePush(_dialogBuilder); 
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!,imgList)),
+                                        ); 
                                       },
                                     ),
                                   ],
