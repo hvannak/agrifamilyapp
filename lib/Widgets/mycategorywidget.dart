@@ -16,6 +16,7 @@ Widget buildControlDropdownCategory(
           AsyncSnapshot<List<Categorymodel>> snapshot) {
         Widget children;
         if (snapshot.hasData) {
+          category = snapshot.data![0].id;
           children = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -25,7 +26,7 @@ Widget buildControlDropdownCategory(
                   decoration: kBoxDecorationStyle,
                   height: 60.0,
                   child: DropdownButtonFormField(
-                    dropdownColor: Colors.white,
+                    dropdownColor: Colors.white,                                      
                     items: snapshot.data!
                         .map((f) => DropdownMenuItem(
                               child: Text(f.title,style: kHintTextStyle),

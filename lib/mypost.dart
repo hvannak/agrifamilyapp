@@ -38,7 +38,7 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    _pageObjModel = new Pageobjmodel(null, null,null,
+    _pageObjModel = new Pageobjmodel(null, null, null,
         new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
     _future = getByPage(context, _pageObjModel.toJson());
   }
@@ -48,7 +48,7 @@ class _MyPostsState extends State<MyPosts> {
         !_controller.position.outOfRange) {
       print('reach the bottom');
       _currentPage += 1;
-      _pageObjModel = new Pageobjmodel(null, null,null,
+      _pageObjModel = new Pageobjmodel(null, null, null,
           new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
       var totalPage = (totalDoc / _pageSize).ceil();
       if (_currentPage <= totalPage) {
@@ -66,7 +66,7 @@ class _MyPostsState extends State<MyPosts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         leading: Icon(Icons.data_usage),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: () {})
@@ -111,6 +111,13 @@ class _MyPostsState extends State<MyPosts> {
                                       title: Text(snapshot.data[index].title),
                                       subtitle:
                                           Text(snapshot.data[index].location),
+                                      onTap: (){
+                                        Postmodel? modelObj = snapshot.data[index];                                     
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!)),
+                                        // );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -146,7 +153,6 @@ class MyEditPosts extends StatefulWidget {
 }
 
 class _MyEditPostsState extends State<MyEditPosts> {
-
   final _formKeymodify = GlobalKey<FormState>();
   String? _id;
   var _title = TextEditingController();
@@ -156,22 +162,26 @@ class _MyEditPostsState extends State<MyEditPosts> {
   var _location = TextEditingController();
   var _price = TextEditingController();
   List<String> _listImage = [];
+  bool _waiting = false;
   String _currency = "៛";
-  List<String> listCurrency = ['៛','\$'];
-  Future<List<String>> getCurrencyList () async{
+  List<String> listCurrency = ['៛', '\$'];
+  Future<List<String>> getCurrencyList() async {
     return listCurrency;
   }
 
   void _onItemTapped(int index) {
     Navigator.of(context).pop();
-      Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MyHomePage(key: UniqueKey(), title: title, index: index)),
-      );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MyHomePage(key: UniqueKey(), title: title, index: index)),
+    );
   }
 
   @override
   void initState() {
-    if(widget.postmodel != null){
+    if (widget.postmodel != null) {
       _id = widget.postmodel!.id;
       category = widget.postmodel!.category;
       _title.text = widget.postmodel!.title;
@@ -188,79 +198,121 @@ class _MyEditPostsState extends State<MyEditPosts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: buildText('NewItem',headertextStyle),),
-      body: Container(
-        child:SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Card(
-          elevation: 10,
-          child: Padding(
-            padding: EdgeInsets.all(5),
-            child: Form(
-              key: _formKeymodify,
-            child: Column(
-              children: [
-                buildControlDropdownCategory(context,'Category',fetchCategoryLang(context,false),Icons.category),
-                buildControl(context, 'Title', _title,
-                                      Icons.title,false, true),
-                buildControlMultiLine(context, 'Description', _description,
-                                      Icons.text_fields),
-                buildControl(context, 'Phone', _phone,
-                                      Icons.phone,false, true),
-                buildControl(context, 'Email', _email,
-                                      Icons.email,false, true),
-                buildControl(context, 'Location', _location,
-                                      Icons.location_city,false, true),
-                buildControl(context, 'Price', _price,
-                                      Icons.money,false, true),
-                buildControlDropdownTF(context,'Currency',_currency,getCurrencyList(),Icons.money_sharp),
-                Center(
-                  child: MyButtonCallback(
-                      myPress: _saveData, labelText: 'Save'))
-              ],
-            )
-          ),
-          )
-        ))
+      appBar: AppBar(
+        title: buildText('NewItem', headertextStyle),
       ),
-      floatingActionButtonLocation:
-              FloatingActionButtonLocation.endFloat,
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                FloatingActionButton(
-                  key: UniqueKey(),
-                  heroTag: 'btnCamera',
-                  onPressed: () async {
-                    var result = await  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ImageFiles()),
-                    );
-                    if(result != null){
-                      print(result.length);
-                      _listImage = result;
-                    }
-                  },                 
-                  child: Icon(Icons.camera_alt),
-                  backgroundColor: Colors.green,
-                ),
-              ],
+      body: Container(
+          child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Card(
+                  elevation: 10,
+                  child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Stack(
+                        children: [
+                          Form(
+                              key: _formKeymodify,
+                              child: Column(
+                                children: [
+                                  buildControlDropdownCategory(
+                                      context,
+                                      'Category',
+                                      fetchCategoryLang(context, false),
+                                      Icons.category),
+                                  buildControl(context, 'Title', _title,
+                                      Icons.title, false, true),
+                                  buildControlMultiLine(context, 'Description',
+                                      _description, Icons.text_fields),
+                                  buildControl(context, 'Phone', _phone,
+                                      Icons.phone, false, true),
+                                  buildControl(context, 'Email', _email,
+                                      Icons.email, false, true),
+                                  buildControl(context, 'Location', _location,
+                                      Icons.location_city, false, true),
+                                  buildControl(context, 'Price', _price,
+                                      Icons.money, false, true),
+                                  buildControlDropdownTF(
+                                      context,
+                                      'Currency',
+                                      _currency,
+                                      getCurrencyList(),
+                                      Icons.money_sharp),
+                                  Center(
+                                      child: MyButtonCallback(
+                                          myPress: _saveData,
+                                          labelText: 'Save'))
+                                ],
+                              )),
+                          Visibility(
+                              visible: _waiting,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Center(
+                                  heightFactor: 8,
+                                  child: SizedBox(
+                                child: CircularProgressIndicator(),
+                                width: 60,
+                                height: 60,
+                              )),
+                              ))
+                        ],
+                      ))))),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              key: UniqueKey(),
+              heroTag: 'btnCamera',
+              onPressed: () async {
+                var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ImageFiles()),
+                );
+                if (result != null) {
+                  print(result.length);
+                  _listImage = result;
+                }
+              },
+              child: Icon(Icons.camera_alt),
+              backgroundColor: Colors.green,
             ),
-          ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: widgetBottomNav,
         currentIndex: selectedIndex,
         selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,      
+        onTap: _onItemTapped,
       ),
     );
   }
 
-  void _saveData(){
-    Postmodel postmodel = Postmodel(_id, category, null, _title.text, _description.text, _phone.text, 
-    _email.text, _location.text, int.parse(_price.text), _currency, _listImage);
-    savePostData(context, postmodel.toJson());
+  void _saveData() async {
+    if(_waiting == false){
+      setState(() {
+        _waiting = true;
+      });
+      Postmodel postmodel = Postmodel(
+          _id,
+          category,
+          null,
+          _title.text,
+          _description.text,
+          _phone.text,
+          _email.text,
+          _location.text,
+          int.parse(_price.text),
+          _currency,
+          _listImage);
+      await savePostData(context, postmodel.toJson());
+      setState(() {
+        _waiting = false;
+      });
+      Navigator.of(context).pop();
+    }
   }
 }

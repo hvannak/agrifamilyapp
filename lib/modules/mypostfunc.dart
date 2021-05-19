@@ -45,22 +45,26 @@ resetPostFunc(BuildContext context) {
 }
 
 Future<Postmodel> savePostData(BuildContext context,Map<String, dynamic> instance) async {
-    print(instance);
     try {
       var response;
+      print(instance['_id']);
       if (instance['_id'] != null) {
         response = await ApiHelpers.fetchPutWithAuth(
-            '/api/posts/put/' + instance['_id'], instance,await getsharedPref('token'));
+            '/posts/put/' + instance['_id'], instance,await getsharedPref('token'));
       } else {
         response =
-            await ApiHelpers.fetchPostWithAuth('/api/posts/post', instance,await getsharedPref('token'));
+            await ApiHelpers.fetchPostWithAuth('/posts/post', instance,await getsharedPref('token'));
+        print(response.body);
       }
       if (response.statusCode == 200) {
-        var message = await getShowLang('CSuccessMessage');
+        var message = await getShowLang('Message_post_success');
         final snackBar = SnackBar(content: Text(message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        return Postmodel.fromJson(jsonDecode(response.body));
+        return Postmodel.fromJson(jsonDecode(response.body)['obj']);
       } else {
+        print(response.statusCode);
+        final snackBar = SnackBar(content: Text(response.body));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         throw (response.statusCode.toString());
       }
     } on SocketException catch (e) {
