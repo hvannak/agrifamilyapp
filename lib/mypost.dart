@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agrifamilyapp/Helpers/constants.dart';
+import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
@@ -316,12 +317,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: widgetBottomNav,
-        currentIndex: selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar: MyBottomNavCallback(onItemTapped: _onItemTapped),
     );
   }
 

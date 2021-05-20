@@ -1,10 +1,10 @@
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 
 class MyBottomNavCallback extends StatelessWidget {
-  final int selectedIndex;
   final Function(int) onItemTapped;
-  MyBottomNavCallback({required this.onItemTapped,required this.selectedIndex});
+  MyBottomNavCallback({required this.onItemTapped});
   @override
   Widget build(BuildContext context) {
     return Container(

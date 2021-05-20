@@ -1,10 +1,13 @@
+import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
+import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/models/usermodel.dart';
 import 'package:agrifamilyapp/modules/myaccountfunc.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 
 import 'Helpers/constants.dart';
@@ -348,6 +351,17 @@ class _MyRegisterState extends State<MyRegister> {
           ),
         ),
       ),
+      bottomNavigationBar: MyBottomNavCallback(onItemTapped: _onItemTapped),
+    );
+  }
+
+   void _onItemTapped(int index) {
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MyHomePage(key: UniqueKey(), title: title, index: index)),
     );
   }
 

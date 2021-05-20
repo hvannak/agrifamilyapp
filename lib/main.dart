@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
 import 'package:agrifamilyapp/modules/mylocalizationfunc.dart';
@@ -75,12 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: widgetBottomNav,
-        currentIndex: selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,      
-      ),
+      bottomNavigationBar: MyBottomNavCallback(onItemTapped: _onItemTapped),
     );
   }
 }
