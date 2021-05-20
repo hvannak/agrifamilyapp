@@ -301,6 +301,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
               key: UniqueKey(),
               heroTag: 'btnimage',
               onPressed: () async {
+                print(widget.postimageList.length);
                 var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
