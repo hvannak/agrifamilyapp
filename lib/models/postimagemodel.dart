@@ -9,8 +9,8 @@ part 'postimagemodel.g.dart';
 class Postimagemodel {
    @JsonKey(name: "_id")
    String? id;
-   String post;
-   Imagedatamodel image;
+   String? post;
+   Imagedatamodel? image;
   Postimagemodel(this.id, this.image, this.post);
   factory Postimagemodel.fromJson(Map<String, dynamic> json) => _$PostimagemodelFromJson(json);
   Map<String, dynamic> toJson() => _$PostimagemodelToJson(this);

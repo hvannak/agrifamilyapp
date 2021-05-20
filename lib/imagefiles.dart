@@ -17,7 +17,8 @@ import 'models/imagedatamodel.dart';
 
 class ImageFiles extends StatefulWidget {
   final List<Postimagemodel> postimageList;
-  ImageFiles(this.postimageList);
+  final bool editmode;
+  ImageFiles(this.postimageList,this.editmode);
   @override
   _ImageFilesState createState() => _ImageFilesState();
 }
@@ -64,7 +65,7 @@ class _ImageFilesState extends State<ImageFiles> {
                       return Stack(
                         children: [
                           Card(                
-                            child: Image.memory(Uint8List.fromList(reInstantiatePostImageCodec(widget.postimageList[index].image.data)),fit: BoxFit.cover,)
+                            child: Image.memory(Uint8List.fromList(reInstantiatePostImageCodec(widget.postimageList[index].image!.data)),fit: BoxFit.cover,)
                           ),
                           InkWell(
                             child: Container(
@@ -74,7 +75,7 @@ class _ImageFilesState extends State<ImageFiles> {
                           ),
                           ),
                           onTap: (){
-                            _listRemove.add(Postimagemodel(widget.postimageList[index].id, widget.postimageList[index].image, widget.postimageList[index].post));
+                            _listRemove.add(Postimagemodel(widget.postimageList[index].id, null, widget.postimageList[index].post));
                             setState(() {
                               widget.postimageList.removeAt(index);
                             });
@@ -119,7 +120,11 @@ class _ImageFilesState extends State<ImageFiles> {
   }
 
   void _keepImageFiles(){
-    Navigator.of(context).pop([_listBase64,_listRemove]);
+    if(widget.editmode == false)
+      _listBase64 = widget.postimageList.map((e) => e.image).cast<String>().toList();
+    if(_listBase64.length > 0 || _listRemove.length > 0){
+      Navigator.of(context).pop([_listBase64,_listRemove]);
+    }
   }
 
   Future getImageFromCamera() async {
@@ -131,7 +136,7 @@ class _ImageFilesState extends State<ImageFiles> {
         List<int> imageBytes = imagefile.readAsBytesSync();
         var fileBuffer = "data:image/png;base64," + base64Encode(imageBytes);
         _listBase64.add(fileBuffer);
-        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), widget.postimageList[0].post));
+        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), null));
       } else {
         print('No image selected.');
       }
@@ -146,7 +151,7 @@ class _ImageFilesState extends State<ImageFiles> {
         List<int> imageBytes = imagefile.readAsBytesSync();
         var fileBuffer = "data:image/png;base64," + base64Encode(imageBytes);
         _listBase64.add(fileBuffer);
-        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), widget.postimageList[0].post));
+        widget.postimageList.add(Postimagemodel(null,Imagedatamodel('buffer',imageBytes), null));
       } else {
         print('No image selected.');
       }

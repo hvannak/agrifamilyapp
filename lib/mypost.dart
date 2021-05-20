@@ -32,6 +32,7 @@ class _MyPostsState extends State<MyPosts> {
   int _currentPage = 1;
   int _pageSize = 7;
   late Pageobjmodel _pageObjModel;
+  bool _waiting = false;
   @override
   void initState() {
     super.initState();
@@ -86,48 +87,74 @@ class _MyPostsState extends State<MyPosts> {
               height: 60,
             )));
           } else {
-            return ListView.builder(
-              controller: _controller,
-              physics: AlwaysScrollableScrollPhysics(),
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                if (moreLoad && index == listPost.length - 1) {
-                  return CupertinoActivityIndicator();
-                }
-                return Container(
-                    height: 120,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          child: Card(
-                              shadowColor: Colors.blue,
-                              child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: Icon(Icons.album),
-                                      title: Text(snapshot.data[index].title),
-                                      subtitle:
-                                          Text(snapshot.data[index].location),
-                                      onTap: () async {
-                                        Postmodel? modelObj = snapshot.data[index];
-                                        List<Postimagemodel> imgList = await fetchPostImages(context,snapshot.data[index].id);                                    
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => MyEditPosts(modelObj!,imgList)),
-                                        ); 
-                                      },
+            return Stack(
+              children: [
+                ListView.builder(
+                  controller: _controller,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (moreLoad && index == listPost.length - 1) {
+                      return CupertinoActivityIndicator();
+                    }
+                    return Container(
+                        height: 120,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Card(
+                                  shadowColor: Colors.blue,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: Icon(Icons.album),
+                                          title:
+                                              Text(snapshot.data[index].title),
+                                          subtitle: Text(
+                                              snapshot.data[index].location),
+                                          onTap: () async {
+                                            setState(() {
+                                              _waiting = true;
+                                            });
+                                            Postmodel? modelObj =
+                                                snapshot.data[index];
+                                            List<Postimagemodel> imgList =
+                                                await fetchPostImages(context,
+                                                    snapshot.data[index].id);
+                                            setState(() {
+                                              _waiting = false;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyEditPosts(
+                                                          modelObj!, imgList,true)),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )),
-                        )
-                      ],
-                    ));
-              },
+                                  )),
+                            )
+                          ],
+                        ));
+                  },
+                ),
+                Visibility(
+                    visible: _waiting,
+                    child: Container(
+                        child: Center(
+                            child: SizedBox(
+                      child: CircularProgressIndicator(),
+                      width: 60,
+                      height: 60,
+                    ))))
+              ],
             );
           }
         },
@@ -136,7 +163,7 @@ class _MyPostsState extends State<MyPosts> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyEditPosts(null,[])),
+            MaterialPageRoute(builder: (context) => MyEditPosts(null, [],false)),
           );
         },
         child: const Icon(Icons.navigation),
@@ -144,20 +171,14 @@ class _MyPostsState extends State<MyPosts> {
       ),
     );
   }
-
-  static Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
-  return DialogRoute<void>(
-    context: context,
-    builder: (BuildContext context) => const AlertDialog(title: Text('Material Alert!')),
-  );
-}
 }
 
 //My Edit Post
 class MyEditPosts extends StatefulWidget {
   final Postmodel? postmodel;
   final List<Postimagemodel> postimageList;
-  MyEditPosts(this.postmodel,this.postimageList);
+  final bool editmode;
+  MyEditPosts(this.postmodel, this.postimageList,this.editmode);
   @override
   _MyEditPostsState createState() => _MyEditPostsState();
 }
@@ -172,7 +193,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   var _location = TextEditingController();
   var _price = TextEditingController();
   List<String> _listImage = [];
-  List<Postimagemodel> _listRemoveImage = [];  
+  List<Postimagemodel> _listRemoveImage = [];
   bool _waiting = false;
   String _currency = "៛";
   List<String> listCurrency = ['៛', '\$'];
@@ -192,14 +213,14 @@ class _MyEditPostsState extends State<MyEditPosts> {
 
   @override
   void initState() {
-    print(widget.postmodel!.phone);
     if (widget.postmodel != null) {
       _id = widget.postmodel!.id;
       category = widget.postmodel!.category;
       _title.text = widget.postmodel!.title;
       _description.text = widget.postmodel!.description;
       _phone.text = widget.postmodel!.phone!;
-      _email.text = widget.postmodel!.email != null ? widget.postmodel!.email! : '';
+      _email.text =
+          widget.postmodel!.email != null ? widget.postmodel!.email! : '';
       _location.text = widget.postmodel!.location!;
       _price.text = widget.postmodel!.price.toString();
       _currency = widget.postmodel!.currency;
@@ -211,7 +232,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: buildText('NewItem', headertextStyle),
+        title: (widget.editmode) ? buildText('EditItem', headertextStyle) : buildText('NewItem', headertextStyle),
       ),
       body: Container(
           child: SingleChildScrollView(
@@ -260,12 +281,12 @@ class _MyEditPostsState extends State<MyEditPosts> {
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Center(
-                                  heightFactor: 8,
-                                  child: SizedBox(
-                                child: CircularProgressIndicator(),
-                                width: 60,
-                                height: 60,
-                              )),
+                                    heightFactor: 8,
+                                    child: SizedBox(
+                                      child: CircularProgressIndicator(),
+                                      width: 60,
+                                      height: 60,
+                                    )),
                               ))
                         ],
                       ))))),
@@ -277,18 +298,19 @@ class _MyEditPostsState extends State<MyEditPosts> {
           children: <Widget>[
             FloatingActionButton(
               key: UniqueKey(),
-              heroTag: 'btnCamera',
+              heroTag: 'btnimage',
               onPressed: () async {
                 var result = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ImageFiles(widget.postimageList)),
+                  MaterialPageRoute(
+                      builder: (context) => ImageFiles(widget.postimageList,widget.editmode)),
                 );
                 if (result != null) {
                   _listImage = result[0];
                   _listRemoveImage = result[1];
                 }
               },
-              child: Icon(Icons.camera_alt),
+              child: Icon(Icons.attach_file),
               backgroundColor: Colors.green,
             ),
           ],
@@ -304,7 +326,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
   }
 
   void _saveData() async {
-    if(_waiting == false){
+    if (_waiting == false) {
       setState(() {
         _waiting = true;
       });
@@ -319,7 +341,8 @@ class _MyEditPostsState extends State<MyEditPosts> {
           _location.text,
           int.parse(_price.text),
           _currency,
-          _listImage,_listRemoveImage);
+          _listImage,
+          _listRemoveImage);
       await savePostData(context, postmodel.toJson());
       setState(() {
         _waiting = false;
