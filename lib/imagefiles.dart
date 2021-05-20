@@ -120,6 +120,15 @@ class _ImageFilesState extends State<ImageFiles> {
   }
 
   void _keepImageFiles(){
+    if(widget.postimageList.length > 0){
+      for (var item in widget.postimageList) {
+        if(item.id == null){
+          var fileBuffer = "data:image/png;base64," + base64Encode(item.image!.data);
+          _listBase64.add(fileBuffer);
+        }
+      }
+    }
+    print(_listBase64.length);
     if(_listBase64.length > 0 || _listRemove.length > 0){
       Navigator.of(context).pop([_listBase64,_listRemove]);
     }
