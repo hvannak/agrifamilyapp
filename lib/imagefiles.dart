@@ -120,8 +120,8 @@ class _ImageFilesState extends State<ImageFiles> {
   }
 
   void _keepImageFiles(){
-    if(widget.editmode == false)
-      _listBase64 = widget.postimageList.map((e) => e.image).cast<String>().toList();
+    if(widget.editmode == false && widget.postimageList.length > 0)
+      _listBase64 = widget.postimageList.map((e) => e.image!.data).cast<String>().toList();
     if(_listBase64.length > 0 || _listRemove.length > 0){
       Navigator.of(context).pop([_listBase64,_listRemove]);
     }
