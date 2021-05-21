@@ -1,6 +1,6 @@
 import 'package:agrifamilyapp/myaccount.dart';
 import 'package:agrifamilyapp/myhomes.dart';
-import 'package:agrifamilyapp/mypost.dart';
+import 'package:agrifamilyapp/myposts.dart';
 import 'package:flutter/material.dart';
 
 List<Widget> widgetOptions = <Widget>[Myhome(), MyPosts(), MyAccount()];

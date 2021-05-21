@@ -1,20 +1,27 @@
 import 'dart:convert';
 
 import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
+import 'package:agrifamilyapp/controllers/postcontroller.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
 import 'package:agrifamilyapp/modules/mylocalizationfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Widgets/mainwidget.dart';
 import 'modules/mypostfunc.dart';
 import 'modules/myhomefunc.dart';
-import 'myaccount.dart';
-import 'myhome.dart';
-import 'mypost.dart';
 
 void main() {
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PostController()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
