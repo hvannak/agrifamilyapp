@@ -8,22 +8,22 @@ import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:flutter/material.dart';
 
 class PostController extends ChangeNotifier  {
-  final List<Postmodel> _postList = [];
+  List<Postmodel> postList = [];
   int _totalDoc = 0;
-  UnmodifiableListView<Postmodel> get items => UnmodifiableListView(_postList);
+  UnmodifiableListView<Postmodel> get items => UnmodifiableListView(postList);
 
   void addPost(Postmodel postmodel){
-    _postList.add(postmodel);
+    postList.add(postmodel);
     notifyListeners();
   }
 
   void removePost(Postmodel postmodel){
-    _postList.remove(postmodel);
+    postList.remove(postmodel);
   }
 
   void updatePost(Postmodel postmodel){
-    int index = _postList.indexOf(postmodel);
-    _postList[index] = postmodel;   
+    int index = postList.indexOf(postmodel);
+    postList[index] = postmodel;   
   }
 
   Future<List<Postmodel>> getPostByPage(BuildContext context,Map<String, dynamic> instance) async {
@@ -32,8 +32,8 @@ class PostController extends ChangeNotifier  {
       if (response.statusCode == 200) {
         var list = jsonDecode(response.body)['objList'] as List;
         _totalDoc = jsonDecode(response.body)['totalDoc'] as int;
-        _postList.addAll(list.map((i) => Postmodel.fromJson(i)).toList());
-        return _postList;
+        postList.addAll(list.map((i) => Postmodel.fromJson(i)).toList());
+        return postList;
       } else {
         final snackBar = SnackBar(content: Text(response.body));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
