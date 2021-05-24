@@ -23,3 +23,14 @@ Future<String> getShowLang(String prop) async {
   var listLocal = list.map((i) => Localizationmodel.fromJson(i)).toList().where((x) => x.props == prop && x.type == 'const').toList();
   return (listLocal.length > 0) ? listLocal[0].text : "Not Set";
 }
+
+  
+  reInstantiateImagesCodec(List<int> buffer){
+    String strValue = new String.fromCharCodes(buffer);
+    if(strValue.startsWith("data:image/png;base64,")){
+      strValue = strValue.split(",")[1];
+      return base64Decode(strValue);
+    } else {
+      return buffer;
+    }            
+  }

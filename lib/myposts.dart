@@ -16,7 +16,7 @@ import 'package:agrifamilyapp/models/postimagemodel.dart';
 import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
-import 'package:agrifamilyapp/modules/mypostfunc.dart';
+import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +40,9 @@ class _MyPostsState extends State<MyPosts> {
     });
     _pageObjModel = new Pageobjmodel(null, null, null,
         new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
-    Provider.of<PostController>(context, listen: false)
-        .getPostByPage(context, _pageObjModel.toJson());
+    var provider = Provider.of<PostController>(context, listen: false);
+    provider.resetPost();
+    provider.getPostByPage(context, _pageObjModel.toJson());
     super.initState();
   }
 
@@ -52,10 +53,10 @@ class _MyPostsState extends State<MyPosts> {
       _currentPage += 1;
       _pageObjModel = new Pageobjmodel(null, null, null,
           new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
-      var totalPage = (totalDoc / _pageSize).ceil();
+      var provider = Provider.of<PostController>(context,listen: false);
+      var totalPage = ( provider.totalDoc/ _pageSize).ceil();
       if (_currentPage <= totalPage) {
-        Provider.of<PostController>(context, listen: false)
-        .getPostByPage(context, _pageObjModel.toJson());
+        provider.getPostByPage(context, _pageObjModel.toJson());
       }
     }
     if (_controller.offset <= _controller.position.minScrollExtent &&
@@ -133,6 +134,7 @@ class _MyPostsState extends State<MyPosts> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Provider.of<PostController>(context,listen: false).setPost(null);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyEditPost(false)),
@@ -153,6 +155,7 @@ class MyEditPost extends StatefulWidget {
 }
 
 class _MyEditPostState extends State<MyEditPost> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKeymodify = GlobalKey<FormState>();
   String? _id;
   var _title = TextEditingController();
@@ -199,21 +202,13 @@ class _MyEditPostState extends State<MyEditPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: (widget.editmode)
             ? buildText('EditItem', headertextStyle)
             : buildText('NewItem', headertextStyle),
       ),
       body: Consumer<PostController>(builder: (_, notify, __) {
-        if (notify.waiting) {
-          return Container(
-              child: Center(
-                  child: SizedBox(
-            child: CircularProgressIndicator(),
-            width: 60,
-            height: 60,
-          )));
-        }
         return Container(
             child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
@@ -264,7 +259,7 @@ class _MyEditPostState extends State<MyEditPost> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   child: Center(
-                                      heightFactor: 8,
+                                      heightFactor: 7,
                                       child: SizedBox(
                                         child: CircularProgressIndicator(),
                                         width: 60,
@@ -318,7 +313,15 @@ class _MyEditPostState extends State<MyEditPost> {
           _currency,
           _listImage,
           _listRemoveImage);
-      Provider.of<PostController>(context,listen: false).savePostData(context, postmodel.toJson());
+      var provider = Provider.of<PostController>(context,listen: false);
+      if(_id == null){
+        await provider.addPostData(postmodel.toJson());
+      }
+      else {
+        await provider.updatePostData(postmodel.toJson());
+      }
+      final snackBar = SnackBar(content: Text(provider.message!));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.of(context).pop();
   }
 }
@@ -334,6 +337,19 @@ class _MyImageFilesState extends State<MyImageFiles> {
   List<String> _listBase64 = [];
   List<Postimagemodel> _listRemove = [];
   final picker = ImagePicker();
+
+  @override
+  void initState() {
+    var provider = Provider.of<PostController>(context,listen:false);;
+    if(provider.postImageList.length > 0){
+      for (var item in provider.postImageList) {
+        if(item.id == null ){
+          provider.removePostImage(item);
+        }
+      }
+    }
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -365,7 +381,7 @@ class _MyImageFilesState extends State<MyImageFiles> {
                       return Stack(
                         children: [
                           Card(                
-                            child: Image.memory(Uint8List.fromList(reInstantiatePostImageCodec(notify.postImageList[index].image!.data)),fit: BoxFit.cover,)
+                            child: Image.memory(Uint8List.fromList(reInstantiateImagesCodec(notify.postImageList[index].image!.data)),fit: BoxFit.cover,)
                           ),
                           InkWell(
                             child: Container(
@@ -376,7 +392,7 @@ class _MyImageFilesState extends State<MyImageFiles> {
                           ),
                           onTap: (){
                             _listRemove.add(Postimagemodel(notify.postImageList[index].id, null, notify.postImageList[index].post));
-                            notify.removePostImage(index);
+                            notify.removePostImage(notify.postImageList[index]);
                           },
                           )
                         ],
@@ -419,15 +435,6 @@ class _MyImageFilesState extends State<MyImageFiles> {
   }
 
   void _keepImageFiles(){
-    var list = Provider.of<PostController>(context,listen:false).postImageList;
-    if(list.length > 0){
-      for (var item in list) {
-        if(item.id == null){
-          var fileBuffer = "data:image/png;base64," + base64Encode(item.image!.data);
-          _listBase64.add(fileBuffer);
-        }
-      }
-    }
     if(_listBase64.length > 0 || _listRemove.length > 0){
       Navigator.of(context).pop([_listBase64,_listRemove]);
     }
