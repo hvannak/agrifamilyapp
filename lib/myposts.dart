@@ -90,7 +90,13 @@ class _MyPostsState extends State<MyPosts> {
             physics: AlwaysScrollableScrollPhysics(),
             itemCount: notify.postList.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
+              return Dismissible(
+                key: UniqueKey(),
+                onDismissed:(direction) async {
+                 await notify.removePostData(notify.postList[index].id!);
+                }, 
+                background: Container(color: Colors.red),
+                child: Container(
                   height: 120,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -127,7 +133,9 @@ class _MyPostsState extends State<MyPosts> {
                             )),
                       )
                     ],
-                  ));
+                  ))
+              );              
+              
             },
           );
         },
@@ -340,11 +348,12 @@ class _MyImageFilesState extends State<MyImageFiles> {
 
   @override
   void initState() {
-    var provider = Provider.of<PostController>(context,listen:false);;
+    var provider = Provider.of<PostController>(context,listen:false);
     if(provider.postImageList.length > 0){
       for (var item in provider.postImageList) {
         if(item.id == null ){
-          provider.removePostImage(item);
+          var fileBuffer = "data:image/png;base64," + base64Encode(item.image!.data);
+          _listBase64.add(fileBuffer);
         }
       }
     }

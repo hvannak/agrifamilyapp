@@ -30,7 +30,9 @@ class PostController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removePost(int index) {
+  void removePost(String id) {
+    print(id);
+    int index = _postList.indexWhere((x) => x.id == id);
     _postList.removeAt(index);
     notifyListeners();
   }
@@ -120,7 +122,6 @@ class PostController extends ChangeNotifier {
       _waiting = true;
       var response = await ApiHelpers.fetchPostWithAuth(
           '/posts/post', instance, await getsharedPref('token'));
-      print(response.body);
       if (response.statusCode == 200) {
         _waiting = false;
         addPost(Postmodel.fromJson(jsonDecode(response.body)['obj']));
@@ -149,6 +150,30 @@ class PostController extends ChangeNotifier {
       if (response.statusCode == 200) {
         _waiting = false;
         updatePost(Postmodel.fromJson(jsonDecode(response.body)['obj']));
+        return _message = await getShowLang('Message_post_success');
+      } else {
+        _waiting = false;
+        return _message = response.body;
+      }
+    } on SocketException catch (e) {
+      _waiting = false;
+      return _message = e.toString();
+    } on Exception catch (e) {
+      _waiting = false;
+      return _message = e.toString();
+    }
+  }
+
+  Future<String> removePostData(String id) async {
+    try {
+      notifyListeners();
+      _waiting = true;
+      var response = await ApiHelpers.deleteData(
+            '/posts/delete/',
+            id,await getsharedPref('token'));
+      if (response.statusCode == 200) {
+        _waiting = false;
+        removePost(id);
         return _message = await getShowLang('Message_post_success');
       } else {
         _waiting = false;

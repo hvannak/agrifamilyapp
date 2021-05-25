@@ -52,9 +52,9 @@ static Future<http.Response> fetchPutWithAuth(
     return response;
   }
 
-  Future<http.Response> deleteData(String url, int id,String token) async {
+ static Future<http.Response> deleteData(String url, String id,String token) async {
     final response =
-        await http.delete(Uri.http(_urlSetting, url + id.toString()), headers: {
+        await http.delete(Uri.parse(_urlSetting + url + id), headers: {
       HttpHeaders.contentTypeHeader: 'application/json',
       'auth-token': token
     });
