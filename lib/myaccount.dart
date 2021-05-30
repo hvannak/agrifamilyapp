@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
@@ -7,6 +9,7 @@ import 'package:agrifamilyapp/models/usermodel.dart';
 import 'package:agrifamilyapp/modules/myaccountfunc.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
+import 'package:agrifamilyapp/modules/mylocalizationfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 
@@ -88,8 +91,11 @@ class _MyAccountState extends State<MyAccount> {
                             ),
                           ),
                         ),
-                        onTap: () {
+                        onTap: () async {
                           print('taped');
+                          setsharedPref('lang',snapshot.data[index].id);
+                          var localization = await fetchLocalLanguage(context,snapshot.data[index].id);
+                          setsharedPref('local',jsonEncode(localization));
                         },
                       ));
                 });
