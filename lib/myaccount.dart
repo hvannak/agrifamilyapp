@@ -95,7 +95,9 @@ class _MyAccountState extends State<MyAccount> {
                           print('taped');
                           setsharedPref('lang',snapshot.data[index].id);
                           var localization = await fetchLocalLanguage(context,snapshot.data[index].id);
-                          setsharedPref('local',jsonEncode(localization));
+                          setState(() {
+                            setsharedPref('local',jsonEncode(localization));
+                          });
                         },
                       ));
                 });
