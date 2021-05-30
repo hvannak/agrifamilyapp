@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
+import 'package:agrifamilyapp/controllers/pagecontroller.dart';
 import 'package:agrifamilyapp/controllers/postcontroller.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:agrifamilyapp/modules/mylanguagefunc.dart';
@@ -18,6 +19,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => PostController()),
+        ChangeNotifierProvider(create: (context) => PagesController())
       ],
       child: MyApp(),
     ),

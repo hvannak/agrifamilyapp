@@ -1,10 +1,13 @@
 import 'package:agrifamilyapp/Helpers/constants.dart';
+import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
 import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
+import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/searchpostmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
+import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 
 class Myhomesearch extends StatefulWidget {
@@ -25,9 +28,15 @@ class _MyhomesearchState extends State<Myhomesearch> {
   String _currency = "៛";
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    var searching = new Searchpostmodel(
+              null, null, null, null, null, null, null, null, '៛', null);
+    Navigator.of(context).pop(searching);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MyHomePage(key: UniqueKey(), title: title, index: index)),
+    );
   }
 
   @override
@@ -101,12 +110,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
                           ],
                         )),
                   )))),
-      bottomNavigationBar: BottomNavigationBar(
-        items: widgetBottomNav,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar: MyBottomNavCallback(onItemTapped: _onItemTapped),
     );
   }
 

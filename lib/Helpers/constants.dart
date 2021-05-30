@@ -15,7 +15,7 @@ final kLabelStyle = TextStyle(
 );
 
 final kTextStyle = TextStyle(
-  color: Colors.white,
+  color: Colors.black,
   fontFamily: 'OpenSans',
 );
 

@@ -63,6 +63,7 @@ class PostController extends ChangeNotifier {
     this._postList = [];
     this._postImageList = [];
     this._postmodel = null;
+    notifyListeners();
   }
 
   void getPostByPage(

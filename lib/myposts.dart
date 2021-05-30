@@ -7,6 +7,7 @@ import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybuttoncallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
+import 'package:agrifamilyapp/controllers/pagecontroller.dart';
 import 'package:agrifamilyapp/controllers/postcontroller.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/imagedatamodel.dart';
@@ -17,6 +18,7 @@ import 'package:agrifamilyapp/models/postmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
+import 'package:agrifamilyapp/mypostsearch.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +30,6 @@ class MyPosts extends StatefulWidget {
 
 class _MyPostsState extends State<MyPosts> {
   int _currentPage = 1;
-  int _pageSize = 7;
-  late Pageobjmodel _pageObjModel;
   late ScrollController _controller;
 
   @override
@@ -38,11 +38,9 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    _pageObjModel = new Pageobjmodel(null, null, null,
-        new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
+    var pageProvider = Provider.of<PagesController>(context,listen: false);  
     var provider = Provider.of<PostController>(context, listen: false);
-    provider.resetPost();
-    provider.getPostByPage(context, _pageObjModel.toJson());
+    provider.getPostByPage(context, pageProvider.pageobjmodel!.toJson());
     super.initState();
   }
 
@@ -51,12 +49,12 @@ class _MyPostsState extends State<MyPosts> {
         !_controller.position.outOfRange) {
       print('reach the bottom');
       _currentPage += 1;
-      _pageObjModel = new Pageobjmodel(null, null, null,
-          new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
+      var pageProvider = Provider.of<PagesController>(context,listen: false);
+      pageProvider.setCurrenctPage(_currentPage);
       var provider = Provider.of<PostController>(context,listen: false);
-      var totalPage = ( provider.totalDoc/ _pageSize).ceil();
+      var totalPage = ( provider.totalDoc/ pageProvider.pageSize).ceil();
       if (_currentPage <= totalPage) {
-        provider.getPostByPage(context, _pageObjModel.toJson());
+        provider.getPostByPage(context, pageProvider.pageobjmodel!.toJson());
       }
     }
     if (_controller.offset <= _controller.position.minScrollExtent &&
@@ -71,7 +69,12 @@ class _MyPostsState extends State<MyPosts> {
       appBar: AppBar(
         leading: Icon(Icons.data_usage),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
+          IconButton(icon: Icon(Icons.search), onPressed: () {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyPostSearch()),
+          );
+          })
         ],
       ),
       body: Consumer<PostController>(
@@ -181,6 +184,7 @@ class _MyEditPostState extends State<MyEditPost> {
   }
 
   void _onItemTapped(int index) {
+    Provider.of<PostController>(context).resetPost();
     Navigator.of(context).pop();
     Navigator.push(
       context,
