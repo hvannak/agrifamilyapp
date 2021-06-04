@@ -70,12 +70,16 @@ class PostController extends ChangeNotifier {
       BuildContext context, Map<String, dynamic> instance) async {
     try {
       _waiting = true;
+      if(instance['pageOpt']['page'] == 1){
+        _postList = [];
+      }
       var response = await ApiHelpers.fetchPostWithAuth(
           '/posts/pageclient', instance, await getsharedPref('token'));
       if (response.statusCode == 200) {
         var list = jsonDecode(response.body)['objList'] as List;
         _totalDoc = jsonDecode(response.body)['totalDoc'] as int;
         _postList.addAll(list.map((i) => Postmodel.fromJson(i)).toList());
+        print(_postList.length);
         notifyListeners();
         _waiting = false;
       } else {

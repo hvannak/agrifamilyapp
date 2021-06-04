@@ -184,7 +184,6 @@ class _MyEditPostState extends State<MyEditPost> {
   }
 
   void _onItemTapped(int index) {
-    Provider.of<PostController>(context).resetPost();
     Navigator.of(context).pop();
     Navigator.push(
       context,
