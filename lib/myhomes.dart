@@ -1,5 +1,6 @@
 
 import 'package:agrifamilyapp/models/searchpostmodel.dart';
+
 import 'package:agrifamilyapp/myhomesearch.dart';
 import 'package:agrifamilyapp/mypostdetails.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,13 +36,13 @@ class _MyhomeState extends State<Myhome> {
   }
 
   _scrollListener() async {
-    var pageProvider = Provider.of<PagesController>(context,listen: false);
-    var provider = Provider.of<PostDisplayController>(context,listen: false);
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       print('reach the bottom');
       _currentPage += 1;
-      pageProvider.setCurrenctPage(_currentPage);     
+      var pageProvider = Provider.of<PagesController>(context,listen: false);
+      pageProvider.setCurrenctPage(_currentPage);
+      var provider = Provider.of<PostDisplayController>(context,listen: false);
       var totalPage = ( provider.totalDoc/ pageProvider.pageSize).ceil();
       if (_currentPage <= totalPage) {
         provider.fetchDisplayPosts(context, pageProvider.pageobjmodel!.toJson());
@@ -50,9 +51,6 @@ class _MyhomeState extends State<Myhome> {
     if (_controller.offset <= _controller.position.minScrollExtent &&
         !_controller.position.outOfRange) {
       print('reach the top');
-      _currentPage = 1;
-      pageProvider.setCurrenctPage(_currentPage);
-      provider.fetchDisplayPosts(context, pageProvider.pageobjmodel!.toJson());
     }
   }
 
