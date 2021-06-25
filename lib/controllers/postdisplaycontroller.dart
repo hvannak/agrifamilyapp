@@ -39,7 +39,6 @@ void fetchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async
       }
       final response = await ApiHelpers.fetchPost('/posts/searchByCat', instance);
       if (response.statusCode == 200) {
-        print(jsonDecode(response.body)["objList"]);
         var list = jsonDecode(response.body)["objList"] as List;
         _totalDoc = jsonDecode(response.body)["totalDoc"];
         _listDisplayPost.addAll(list.map((i) => Postdisplaymodel.fromJson(i)).toList());
