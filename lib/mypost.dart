@@ -41,7 +41,7 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    _pageObjModel = new Pageobjmodel(null, null, null,
+    _pageObjModel = new Pageobjmodel(null,null, null, null,
         new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
     _future = getByPage(context, _pageObjModel.toJson());
   }
@@ -51,7 +51,7 @@ class _MyPostsState extends State<MyPosts> {
         !_controller.position.outOfRange) {
       print('reach the bottom');
       _currentPage += 1;
-      _pageObjModel = new Pageobjmodel(null, null, null,
+      _pageObjModel = new Pageobjmodel(null,null, null, null,
           new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
       var totalPage = (totalDoc / _pageSize).ceil();
       if (_currentPage <= totalPage) {

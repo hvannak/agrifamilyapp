@@ -76,7 +76,7 @@ class _MyPostSearchState extends State<MyPostSearch> {
 
   void _searchData(){
     var pageProvider = Provider.of<PagesController>(context,listen: false);
-    pageProvider.setPage(1,_searchObj.text,searchBy,null);
+    pageProvider.setPage(1,_searchObj.text,null,searchBy,null);
     var provider = Provider.of<PostController>(context, listen: false);
     provider.resetPost();
     provider.getPostByPage(context, pageProvider.pageobjmodel!.toJson());

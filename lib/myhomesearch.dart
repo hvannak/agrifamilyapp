@@ -1,9 +1,7 @@
 import 'package:agrifamilyapp/Helpers/constants.dart';
 import 'package:agrifamilyapp/Widgets/Callback/mybottomnavcallback.dart';
 import 'package:agrifamilyapp/Widgets/controlswidget.dart';
-import 'package:agrifamilyapp/Widgets/mainwidget.dart';
 import 'package:agrifamilyapp/Widgets/mycategorywidget.dart';
-import 'package:agrifamilyapp/Widgets/myhomewidget.dart';
 import 'package:agrifamilyapp/main.dart';
 import 'package:agrifamilyapp/models/searchpostmodel.dart';
 import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
@@ -16,7 +14,6 @@ class Myhomesearch extends StatefulWidget {
 }
 
 class _MyhomesearchState extends State<Myhomesearch> {
-  int _selectedIndex = 0;
   final _formKeymodify = GlobalKey<FormState>();
   var _title = TextEditingController();
   var _description = TextEditingController();

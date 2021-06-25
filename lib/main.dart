@@ -10,6 +10,7 @@ import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Widgets/mainwidget.dart';
+import 'controllers/postdisplaycontroller.dart';
 import 'modules/mypostfunc.dart';
 import 'modules/myhomefunc.dart';
 
@@ -19,7 +20,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => PostController()),
-        ChangeNotifierProvider(create: (context) => PagesController())
+        ChangeNotifierProvider(create: (context) => PagesController()),
+        ChangeNotifierProvider(create: (contex) => PostDisplayController())
       ],
       child: MyApp(),
     ),
