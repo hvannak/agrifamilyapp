@@ -311,6 +311,7 @@ class _MyEditPostState extends State<MyEditPost> {
   }
 
   void _saveData() async {
+    if (_formKeymodify.currentState!.validate()){
       Postmodel postmodel = Postmodel(
           _id,
           category,
@@ -334,6 +335,10 @@ class _MyEditPostState extends State<MyEditPost> {
       final snackBar = SnackBar(content: Text(provider.message!));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.of(context).pop();
+    }
+    else {
+      print('Invalid Data');
+    }     
   }
 }
 
