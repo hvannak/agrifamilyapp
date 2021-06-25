@@ -453,7 +453,15 @@ class _MyImageFilesState extends State<MyImageFiles> {
   }
 
   Future getImageFromSource(bool camera) async {  
-    final pickedFile = (camera) ? await picker.getImage(source: ImageSource.camera) : await picker.getImage(source: ImageSource.gallery) ;
+    final pickedFile = (camera) ? await picker.getImage(
+        source: ImageSource.camera,
+        maxHeight: 180,
+        imageQuality: 70
+      ) : await picker.getImage(
+        source: ImageSource.gallery,
+        maxHeight: 180,
+        imageQuality: 70
+      ) ;
     if (pickedFile != null) {
         File imagefile = new File(pickedFile.path);
         List<int> imageBytes = imagefile.readAsBytesSync();

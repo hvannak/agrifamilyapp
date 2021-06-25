@@ -16,6 +16,7 @@ Widget buildControlDropdownCategory(
           AsyncSnapshot<List<Categorymodel>> snapshot) {
         Widget children;
         if (snapshot.hasData) {
+          category = snapshot.data![0].id;
           children = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -36,9 +37,8 @@ Widget buildControlDropdownCategory(
                       print(value);
                       category = value.toString();
                     },
-                    // hint: Text(label,style: kHintTextStyle),
                     hint: buildText(label,headertextStyle),
-                    value: (category == null) ? snapshot.data![0].id : category,
+                    value: category,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.only(top: 5.0),
