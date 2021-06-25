@@ -16,7 +16,7 @@ Postmodel _$PostmodelFromJson(Map<String, dynamic> json) {
     json['phone'] as String?,
     json['email'] as String?,
     json['location'] as String?,
-    json['price'] as int,
+    json['price'] as num,
     json['currency'] as String,
     (json['image'] as List<dynamic>?)?.map((e) => e as String).toList(),
     (json['removeimage'] as List<dynamic>?)

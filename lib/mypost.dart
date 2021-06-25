@@ -336,7 +336,7 @@ class _MyEditPostsState extends State<MyEditPosts> {
           _phone.text,
           _email.text,
           _location.text,
-          int.parse(_price.text),
+          double.parse(_price.text),
           _currency,
           _listImage,
           _listRemoveImage);

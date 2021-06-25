@@ -26,6 +26,13 @@ final headertextStyle = TextStyle(
   fontFamily: 'OpenSans',
 );
 
+final labeltextStyle = TextStyle(
+  color: Color(0xFF527DAA),
+  fontSize: 12.0,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'OpenSans',
+);
+
 final kbtnStyle = TextStyle(
             color: Colors.white,
             letterSpacing: 1.5,

@@ -16,7 +16,7 @@ class Postdisplaymodel {
    String? phone;
    String? email;
    String? location;
-   int price;
+   num price;
    String currency;
    List<int>? firstimage;
    String? lang;

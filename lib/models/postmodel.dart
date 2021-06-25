@@ -16,7 +16,7 @@ class Postmodel {
    String? phone;
    String? email;
    String? location;
-   int price;
+   num price;
    String currency;
    List<String>? image;
    List<Postimagemodel>? removeimage;

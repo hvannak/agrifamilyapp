@@ -173,7 +173,7 @@ class _MyhomeState extends State<Myhome> {
                                                             " " +
                                                             snapshot.data[index]
                                                                 .currency,
-                                                        style: headertextStyle),
+                                                        style: labeltextStyle),
                                                   ),
                                                   radius: 50,
                                                   backgroundColor:
