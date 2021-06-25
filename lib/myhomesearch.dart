@@ -8,6 +8,8 @@ import 'package:agrifamilyapp/modules/mycategoryfunc.dart';
 import 'package:agrifamilyapp/modules/mymainfunc.dart';
 import 'package:flutter/material.dart';
 
+import 'Widgets/Callback/mybuttoncallback.dart';
+
 class Myhomesearch extends StatefulWidget {
   @override
   _MyhomesearchState createState() => _MyhomesearchState();
@@ -103,7 +105,10 @@ class _MyhomesearchState extends State<Myhomesearch> {
                                     ),
                                   ),
                                 ]),
-                            buildSearchBtn()
+                            Center(
+                              child: MyButtonCallback(
+                                  myPress: _searchData,
+                                  labelText: 'Search_btn'))
                           ],
                         )),
                   )))),
@@ -144,28 +149,10 @@ class _MyhomesearchState extends State<Myhomesearch> {
     );
   }
 
-  Widget buildSearchBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.white60, // background
-          onPrimary: Colors.white,
-          padding: EdgeInsets.all(20),
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        onPressed: () {
-          var fromP = (_fromPrice.text.length == 0) ? null : int.parse(_fromPrice.text);
-          var toP = (_toPrice.text.length == 0) ? null : int.parse(_toPrice.text);
-          var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
-          Navigator.of(context).pop(searching);
-        },
-        child: buildText('Search_btn',headertextStyle)
-      ),
-    );
+  void _searchData(){
+    var fromP = (_fromPrice.text.length == 0) ? null : int.parse(_fromPrice.text);
+    var toP = (_toPrice.text.length == 0) ? null : int.parse(_toPrice.text);
+    var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
+    Navigator.of(context).pop(searching);
   }
 }
