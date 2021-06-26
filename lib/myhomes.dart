@@ -178,7 +178,7 @@ class _MyhomeState extends State<Myhome> {
               setState(() {
                 _heroTagIndex += 1;
                 _heroTag = "btnSearching" + _heroTagIndex.toString();
-                provider.fetchDisplayPosts(context, pageProvider.pageobjmodel!.toJson());
+                provider.fetchSearchDisplayPosts(context, pageProvider.pageobjmodel!.toJson());
               });
             }
           },

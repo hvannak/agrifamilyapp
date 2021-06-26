@@ -5,9 +5,6 @@ import 'dart:io';
 import 'package:agrifamilyapp/Helpers/apiHelpers.dart';
 import 'package:agrifamilyapp/models/postdisplaymodel.dart';
 import 'package:agrifamilyapp/models/postimagemodel.dart';
-import 'package:agrifamilyapp/models/postmodel.dart';
-import 'package:agrifamilyapp/modules/myaccountfunc.dart';
-import 'package:agrifamilyapp/modules/mygeneralfunc.dart';
 import 'package:flutter/material.dart';
 
 class PostDisplayController extends ChangeNotifier {
@@ -22,11 +19,10 @@ class PostDisplayController extends ChangeNotifier {
   bool get waiting => _waiting;
   int get totalDoc => _totalDoc;
 
-  void resetPost() {
+  void resetDisplayPost() {
     this._totalDoc = 0;
     this._listDisplayPost = [];
     this._postImageList = [];
-    notifyListeners();
   }
 
 
@@ -82,6 +78,37 @@ void fetchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async
       }
     }
     on SocketException catch (e) {
+      final snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw (e);
+    } on Exception catch (e) {
+      print(e.toString());
+      throw (e);
+    }
+  }
+
+  void fetchSearchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async {
+    try {
+      print(instance);
+      _waiting = true;
+      if(instance['pageOpt']['page'] == 1){
+        _listDisplayPost = [];
+      }
+      final response = await ApiHelpers.fetchPost('/posts/searchdetails', instance);
+      if (response.statusCode == 200) {
+        var list = jsonDecode(response.body)["objList"] as List;
+        _totalDoc = jsonDecode(response.body)["totalDoc"];
+        _listDisplayPost.addAll(list.map((i) => Postdisplaymodel.fromJson(i)).toList());
+        print(listDisplayPost.length);
+        notifyListeners();
+        _waiting = false;      
+      } else {
+        final snackBar = SnackBar(content: Text(response.body));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        print(response.statusCode.toString());
+        throw (response.statusCode.toString());
+      }
+    } on SocketException catch (e) {
       final snackBar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       throw (e);

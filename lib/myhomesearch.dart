@@ -152,6 +152,7 @@ class _MyhomesearchState extends State<Myhomesearch> {
   void _searchData(){
     var fromP = (_fromPrice.text.length == 0) ? null : int.parse(_fromPrice.text);
     var toP = (_toPrice.text.length == 0) ? null : int.parse(_toPrice.text);
+    print(category);
     var searching = Searchpostmodel(category,null,_title.text,_description.text,_phone.text,_email.text,_location.text,fromP,_currency,toP);
     Navigator.of(context).pop(searching);
   }

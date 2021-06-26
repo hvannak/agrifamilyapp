@@ -11,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Widgets/mainwidget.dart';
 import 'controllers/postdisplaycontroller.dart';
-import 'modules/mypostfunc.dart';
-import 'modules/myhomefunc.dart';
 
 void main() {
   // runApp(MyApp());
@@ -57,8 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
-      resetPostFunc(context);
-      resetHomeFunc(context);
+      Provider.of<PostDisplayController>(context,listen: false).resetDisplayPost();
+      Provider.of<PostController>(context,listen: false).resetPost();
     });
   }
 
