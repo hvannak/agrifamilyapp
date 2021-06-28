@@ -56,7 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       selectedIndex = index;
       Provider.of<PostDisplayController>(context,listen: false).resetDisplayPost();
-      Provider.of<PostController>(context,listen: false).resetPost();
+      Provider.of<PostController>(context,listen: false).resetPost();      
+      Provider.of<PagesController>(context,listen: false).setCurrenctPage(1);
     });
   }
 

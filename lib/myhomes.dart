@@ -29,7 +29,7 @@ class _MyhomeState extends State<Myhome> {
     _controller.addListener(() {
       _scrollListener();
     });
-    var pageProvider = Provider.of<PagesController>(context,listen: false);  
+    var pageProvider = Provider.of<PagesController>(context,listen: false); 
     var provider = Provider.of<PostDisplayController>(context, listen: false);
     provider.fetchDisplayPosts(context, pageProvider.pageobjmodel!.toJson());
     super.initState();

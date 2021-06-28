@@ -38,7 +38,7 @@ class _MyPostsState extends State<MyPosts> {
     _controller.addListener(() {
       _scrollListener();
     });
-    var pageProvider = Provider.of<PagesController>(context,listen: false);  
+    var pageProvider = Provider.of<PagesController>(context,listen: false); 
     var provider = Provider.of<PostController>(context, listen: false);
     provider.getPostByPage(context, pageProvider.pageobjmodel!.toJson());
     super.initState();

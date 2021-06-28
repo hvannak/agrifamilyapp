@@ -24,7 +24,6 @@ void setCurrenctPage(int currentPage){
   _currentPage = currentPage;
   _pageObjModel = new Pageobjmodel(_searchObj,_searchpostmodel, _searchObjBy, _categoryId,
         new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
-    notifyListeners();
 }
 
 void setPage(int currentPage,String? searchObj,Searchpostmodel? searchpostmodel,String? searchObjBy,String? categoryId) {
