@@ -20,6 +20,14 @@ class PagesController extends ChangeNotifier {
  Pageobjmodel? get pageobjmodel => _pageObjModel;
  int get pageSize => _pageSize;
 
+ void resetPage(){
+   this._currentPage = 1;
+   this._searchObj = null;
+   this._searchpostmodel = null;
+   _pageObjModel = new Pageobjmodel(this._searchObj,this._searchpostmodel, null, null,
+        new Pageoptmodel(_currentPage, _pageSize, ['title'], [false]));
+ }
+
 void setCurrenctPage(int currentPage){
   _currentPage = currentPage;
   _pageObjModel = new Pageobjmodel(_searchObj,_searchpostmodel, _searchObjBy, _categoryId,

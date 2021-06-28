@@ -67,6 +67,7 @@ class PostController extends ChangeNotifier {
 
   void getPostByPage(
       BuildContext context, Map<String, dynamic> instance) async {
+        print(instance);
     try {
       _waiting = true;
       if(instance['pageOpt']['page'] == 1){

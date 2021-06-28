@@ -28,6 +28,7 @@ class PostDisplayController extends ChangeNotifier {
 
 
 void fetchDisplayPosts(BuildContext context,Map<String, dynamic> instance) async {
+  print(instance);
     try {
       _waiting = true;
       if(instance['pageOpt']['page'] == 1){
