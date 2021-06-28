@@ -16,7 +16,7 @@ Widget buildControlDropdownCategory(
           AsyncSnapshot<List<Categorymodel>> snapshot) {
         Widget children;
         if (snapshot.hasData) {
-          category = snapshot.data![0].id;
+          category = (category == null) ? snapshot.data![0].id : category;
           children = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
