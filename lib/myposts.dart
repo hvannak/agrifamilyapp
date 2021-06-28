@@ -311,7 +311,7 @@ class _MyEditPostState extends State<MyEditPost> {
   }
 
   void _saveData() async {
-    if(_listImage.length == 0){
+    if(_listImage.length == 0 && _id == null){
       final snackBar = SnackBar(content: Icon(Icons.image_not_supported));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
