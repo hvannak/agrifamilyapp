@@ -311,7 +311,11 @@ class _MyEditPostState extends State<MyEditPost> {
   }
 
   void _saveData() async {
-    if (_formKeymodify.currentState!.validate()){
+    if(_listImage.length == 0){
+      final snackBar = SnackBar(content: Icon(Icons.image_not_supported));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    else if (_formKeymodify.currentState!.validate()){
       Postmodel postmodel = Postmodel(
           _id,
           category,
